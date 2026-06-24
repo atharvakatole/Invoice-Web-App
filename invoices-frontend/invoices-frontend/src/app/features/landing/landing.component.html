@@ -1,0 +1,207 @@
+<div class="landing">
+  <!-- ══ NAV ══ -->
+  <header class="lp-nav" [class.scrolled]="scrolled()">
+    <div class="lp-nav-inner">
+      <div class="lp-brand">
+        <div class="brand-mark">IN</div>
+        <strong>Invoicely</strong>
+      </div>
+
+      <nav class="lp-links">
+        <a (click)="scrollTo('features')">Features</a>
+        <a (click)="scrollTo('how')">How it works</a>
+        <a (click)="scrollTo('pricing')">Pricing</a>
+      </nav>
+
+      <div class="lp-nav-actions">
+        <!-- Theme picker -->
+        <div class="theme-picker">
+          <button class="theme-toggle" (click)="themePickerOpen.set(!themePickerOpen())" aria-label="Change theme">
+            <span class="theme-current-dot"></span>
+          </button>
+          <div class="theme-menu" *ngIf="themePickerOpen()">
+            <p class="theme-menu-label">Pick a vibe</p>
+            <button *ngFor="let t of theme.themes" class="theme-option" [class.active]="theme.activeId() === t.id" (click)="selectTheme(t.id)">
+              <span class="theme-swatch" [style.background]="t.swatch"></span>
+              {{ t.name }}
+              <span class="check" *ngIf="theme.activeId() === t.id">✓</span>
+            </button>
+          </div>
+        </div>
+
+        <a routerLink="/login" class="btn btn-ghost btn-sm">Sign in</a>
+        <a routerLink="/register" class="btn btn-primary btn-sm">Get started</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══ HERO ══ -->
+  <section class="hero">
+    <div class="hero-orbs">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+    </div>
+    <div class="hero-grid-bg"></div>
+
+    <div class="hero-content">
+      <div class="hero-badge fade-in">✨ Built for stylists, designers & freelancers</div>
+      <h1 class="hero-title">
+        Invoicing that feels
+        <span class="text-gradient">effortless &amp; precise.</span>
+      </h1>
+      <p class="hero-sub">
+        Create polished, GST-ready invoices, track every project, manage bills and assistants, and watch your
+        cash flow in real time — all from one calm, focused workspace.
+      </p>
+      <div class="hero-cta">
+        <a routerLink="/register" class="btn btn-primary">Start free — no card needed</a>
+        <button class="btn btn-ghost" (click)="scrollTo('features')">See what's inside ↓</button>
+      </div>
+
+      <div class="hero-trust">
+        <div class="trust-item"><strong class="text-gradient">5,000+</strong><span>invoices generated</span></div>
+        <div class="trust-divider"></div>
+        <div class="trust-item"><strong class="text-gradient">₹2.4Cr</strong><span>payments tracked</span></div>
+        <div class="trust-divider"></div>
+        <div class="trust-item"><strong class="text-gradient">99.9%</strong><span>uptime</span></div>
+      </div>
+    </div>
+
+    <!-- Floating invoice mockup -->
+    <div class="hero-visual">
+      <div class="float-card invoice-card">
+        <div class="fc-head">
+          <span class="mono fc-num">INV-29481</span>
+          <span class="badge badge-paid">Paid</span>
+        </div>
+        <div class="fc-line"><span>Bridal Styling — Full Day</span><span class="mono">₹35,000</span></div>
+        <div class="fc-line"><span>Assistant (2 days)</span><span class="mono">₹8,500</span></div>
+        <div class="fc-line"><span>GST (18%)</span><span class="mono">₹5,000</span></div>
+        <div class="fc-total"><span>Total</span><span class="mono text-gradient">₹48,500</span></div>
+        <div class="fc-bar"></div>
+      </div>
+
+      <div class="float-card mini-stat stat-a">
+        <span class="ms-label">This month</span>
+        <span class="ms-value text-gradient">₹1,82,400</span>
+        <span class="ms-trend">▲ 24% vs last month</span>
+      </div>
+
+      <div class="float-card mini-stat stat-b">
+        <span class="ms-label">Return due</span>
+        <span class="ms-value">Red Lehenga</span>
+        <span class="ms-trend warn">in 2 days</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ LOGOS / MARQUEE ══ -->
+  <div class="marquee-wrap">
+    <div class="marquee">
+      <span *ngFor="let w of [1,2]" class="marquee-group">
+        Invoices · Projects · Clients · Bills · Assistants · Calendar · Reports · GST · Branding · Notifications ·
+      </span>
+    </div>
+  </div>
+
+  <!-- ══ FEATURES ══ -->
+  <section class="section" id="features">
+    <div class="section-head reveal" #reveal>
+      <span class="section-tag">Everything in one place</span>
+      <h2>One workspace for the whole job</h2>
+      <p>From the first client conversation to the final payment — Invoicely keeps every moving part connected.</p>
+    </div>
+
+    <div class="feature-grid">
+      <div class="feature-card reveal" *ngFor="let f of features; let i = index" #reveal [style.transition-delay]="(i * 70) + 'ms'">
+        <div class="feature-icon">{{ f.icon }}</div>
+        <h3>{{ f.title }}</h3>
+        <p>{{ f.desc }}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ HOW IT WORKS ══ -->
+  <section class="section how-section" id="how">
+    <div class="section-head reveal" #reveal>
+      <span class="section-tag">Simple by design</span>
+      <h2>Three steps to getting paid</h2>
+    </div>
+
+    <div class="steps">
+      <div class="step reveal" *ngFor="let s of steps; let i = index" #reveal [style.transition-delay]="(i * 100) + 'ms'">
+        <div class="step-num text-gradient">{{ s.n }}</div>
+        <h3>{{ s.title }}</h3>
+        <p>{{ s.desc }}</p>
+        <div class="step-connector" *ngIf="i < steps.length - 1"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ PRICING ══ -->
+  <section class="section" id="pricing">
+    <div class="section-head reveal" #reveal>
+      <span class="section-tag">Pricing</span>
+      <h2>Start free, upgrade when you grow</h2>
+      <p>No hidden fees. Cancel anytime.</p>
+    </div>
+
+    <div class="pricing-grid">
+      <div class="price-card reveal" *ngFor="let p of plans" [class.highlight]="p.highlight" #reveal>
+        <div class="price-badge" *ngIf="p.highlight">Most popular</div>
+        <h3 class="price-name">{{ p.name }}</h3>
+        <div class="price-amount"><span class="text-gradient">{{ p.price }}</span><span class="price-period">/{{ p.period }}</span></div>
+        <ul class="price-features">
+          <li *ngFor="let f of p.features"><span class="tick">✓</span> {{ f }}</li>
+        </ul>
+        <a routerLink="/register" class="btn btn-block" [class.btn-primary]="p.highlight" [class.btn-ghost]="!p.highlight">{{ p.cta }}</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CTA ══ -->
+  <section class="cta-section reveal" #reveal>
+    <div class="cta-orb"></div>
+    <h2>Ready to make invoicing effortless?</h2>
+    <p>Join thousands of freelancers and studios who get paid faster with Invoicely.</p>
+    <a routerLink="/register" class="btn btn-primary btn-lg">Create your free account</a>
+  </section>
+
+  <!-- ══ FOOTER ══ -->
+  <footer class="lp-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="lp-brand">
+          <div class="brand-mark">IN</div>
+          <strong>Invoicely</strong>
+        </div>
+        <p>Invoicing & business management for creative professionals.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a (click)="scrollTo('features')">Features</a>
+          <a (click)="scrollTo('pricing')">Pricing</a>
+          <a routerLink="/register">Get started</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a>About</a>
+          <a>Blog</a>
+          <a>Contact</a>
+        </div>
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <a>Privacy</a>
+          <a>Terms</a>
+          <a (click)="openCookieSettings()">Cookie settings</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© {{ year }} Invoicely. All rights reserved.</span>
+      <span>Made with care in India 🇮🇳</span>
+    </div>
+  </footer>
+</div>

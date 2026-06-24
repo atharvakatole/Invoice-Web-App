@@ -1,0 +1,207 @@
+<div class="fade-in">
+  <div class="page-header">
+    <div>
+      <h1>Invoice Branding</h1>
+      <p class="text-dim">Design how your invoices look — pick a layout, add your logo and details — or upload your own PDF to use as the background.</p>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab" [class.active]="activeTab() === 'design'" (click)="activeTab.set('design')">🎨 Design Template</button>
+    <button class="tab" [class.active]="activeTab() === 'upload'" (click)="activeTab.set('upload')">📄 Upload Custom PDF</button>
+  </div>
+
+  <!-- =================== DESIGN TAB =================== -->
+  <div *ngIf="activeTab() === 'design'">
+    <div *ngIf="loadingConfig()" class="skeleton" style="height: 400px; width: 100%;"></div>
+
+    <div class="grid" *ngIf="!loadingConfig()">
+      <div class="card">
+        <h3 class="mb-16">Choose a Layout</h3>
+        <div class="style-grid">
+          <button
+            type="button"
+            class="style-card"
+            *ngFor="let s of styles()"
+            [class.selected]="config().templateStyle === s.key"
+            (click)="selectStyle(s.key)">
+
+            <!-- Mini visual preview -->
+            <div class="style-preview" [ngSwitch]="s.key" [style.--accent]="config().accentColor">
+              <div class="mock modern" *ngSwitchCase="'modern'">
+                <div class="mock-band"></div>
+                <div class="mock-lines">
+                  <div class="ml w60"></div>
+                  <div class="ml w40"></div>
+                  <div class="ml w80"></div>
+                </div>
+              </div>
+              <div class="mock classic" *ngSwitchCase="'classic'">
+                <div class="mock-row">
+                  <div class="mock-circle"></div>
+                  <div class="mock-title">INVOICE</div>
+                </div>
+                <div class="mock-lines">
+                  <div class="ml w70"></div>
+                  <div class="ml w50"></div>
+                  <div class="ml w80"></div>
+                </div>
+              </div>
+              <div class="mock minimal" *ngSwitchCase="'minimal'">
+                <div class="mock-rule"></div>
+                <div class="mock-lines">
+                  <div class="ml w50"></div>
+                  <div class="ml w65"></div>
+                  <div class="ml w35"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="style-info">
+              <strong>{{ s.name }}</strong>
+              <p>{{ s.description }}</p>
+            </div>
+
+            <div class="style-check" *ngIf="config().templateStyle === s.key">✓</div>
+          </button>
+        </div>
+
+        <div class="field mt-24">
+          <label>Accent Color</label>
+          <div class="color-row">
+            <input type="color" [value]="config().accentColor" (input)="onAccentColorChange($any($event.target).value)" />
+            <input type="text" [value]="config().accentColor" (input)="onAccentColorChange($any($event.target).value)" maxlength="7" class="color-text" />
+          </div>
+          <span class="hint">Used for headers, table accents, and totals.</span>
+        </div>
+
+        <div class="field mt-16">
+          <label>Logo</label>
+          <div class="logo-row">
+            <div class="logo-preview" *ngIf="logoPreviewUrl(); else noLogo">
+              <img [src]="logoPreviewUrl()" alt="Logo preview" />
+            </div>
+            <ng-template #noLogo>
+              <div class="logo-placeholder">No logo</div>
+            </ng-template>
+            <div class="logo-actions">
+              <input type="file" id="logo-file" accept="image/png,image/jpeg" (change)="onLogoSelected($event)" hidden />
+              <label for="logo-file" class="btn btn-ghost btn-sm">Upload Logo</label>
+              <button type="button" class="btn btn-danger btn-sm" *ngIf="logoPreviewUrl()" (click)="removeLogo()">Remove</button>
+            </div>
+          </div>
+          <span class="hint">PNG or JPEG, max 2 MB. Shown in the invoice header.</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="mb-16">Footer & Payment Details</h3>
+
+        <div class="field">
+          <label>Your Name / Studio Name</label>
+          <input type="text" [ngModel]="config().footerName" (ngModelChange)="setFooterName($event)" placeholder="e.g. Aishwarya Gupta" />
+        </div>
+
+        <div class="field">
+          <label>Title / Role</label>
+          <input type="text" [ngModel]="config().footerTitle" (ngModelChange)="setFooterTitle($event)" placeholder="e.g. Stylist | Costume Designer" />
+        </div>
+
+        <div class="field">
+          <label>Subtitle (e.g. PAN / GST / License)</label>
+          <input type="text" [ngModel]="config().footerSubtitle" (ngModelChange)="setFooterSubtitle($event)" placeholder="e.g. PAN : BTSPG3322H" />
+        </div>
+
+        <div class="field">
+          <label>Payment / Bank Details</label>
+          <textarea rows="8" [ngModel]="config().paymentDetails" (ngModelChange)="setPaymentDetails($event)" placeholder="BANK – AXIS&#10;ACCOUNT HOLDER – Your Name&#10;A/C NO. – 0000000000000&#10;IFSC – ABCD0000000&#10;UPI ID – yourname@okaxis"></textarea>
+          <span class="hint">Each line is printed as-is in the invoice footer.</span>
+        </div>
+
+        <div class="flex gap-12 mt-16">
+          <button class="btn btn-ghost" *ngIf="config().hasBranding" (click)="resetDesign()">Reset to Default</button>
+          <button class="btn btn-primary btn-block" [disabled]="savingConfig()" (click)="saveDesign()">
+            {{ savingConfig() ? 'Saving...' : 'Save Invoice Design' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =================== UPLOAD CUSTOM PDF TAB =================== -->
+  <div *ngIf="activeTab() === 'upload'">
+    <div class="grid">
+      <div class="card">
+        <h3 class="mb-16">Upload Template</h3>
+
+        <div
+          class="dropzone"
+          [class.dragging]="isDragging()"
+          (drop)="onDrop($event)"
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave()">
+          <input type="file" id="template-file" accept="application/pdf" (change)="onFileSelected($event)" hidden />
+          <div class="dz-icon">📄</div>
+          <p class="dz-title">Drag & drop your invoice PDF here</p>
+          <p class="text-faint">or</p>
+          <label for="template-file" class="btn btn-primary btn-sm">
+            {{ uploading() ? 'Uploading...' : 'Browse File' }}
+          </label>
+          <p class="text-faint mt-16">PDF only · Max 10 MB · 1 page recommended</p>
+        </div>
+
+        <div class="info-box mt-24">
+          <h4>How it works</h4>
+          <p>
+            We scan your PDF for common invoice labels — <em>Invoice No, Due Date, Bill To, Subtotal, GST, Total,</em>
+            and the line-items table — and remember exactly where they appear. When you download or preview an
+            invoice, we draw your live invoice data at those same positions on top of your uploaded PDF, so the
+            background, branding, and visual style stay exactly as you designed it. Works best with a
+            <strong>blank template</strong> (labels and table headers, but no filled-in sample data).
+          </p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="flex-between mb-16">
+          <h3>Current Template</h3>
+          <button class="btn btn-danger btn-sm" *ngIf="status()?.hasTemplate" (click)="remove()">Remove</button>
+        </div>
+
+        <div *ngIf="loading()" class="skeleton" style="height: 320px; width: 100%;"></div>
+
+        <ng-container *ngIf="!loading()">
+          <div *ngIf="!status()?.hasTemplate" class="empty">
+            <div class="empty-icon">🎨</div>
+            <h3>No custom template yet</h3>
+            <p>Your invoices currently use the layout from the "Design Template" tab. Upload a PDF here to override it completely.</p>
+          </div>
+
+          <ng-container *ngIf="status() as s">
+          <div *ngIf="s.hasTemplate" class="template-info">
+            <div class="meta-row">
+              <div>
+                <span class="text-faint">File</span>
+                <p class="mono">{{ s.fileName }}</p>
+              </div>
+              <div>
+                <span class="text-faint">Updated</span>
+                <p>{{ s.updatedAt | date:'medium' }}</p>
+              </div>
+            </div>
+
+            <div class="field-status mt-16" *ngIf="s.detectedFields.length || s.missingFields.length">
+              <span class="badge badge-paid" *ngFor="let f of s.detectedFields">✓ {{ label(f) }}</span>
+              <span class="badge badge-pending" *ngFor="let f of s.missingFields">~ {{ label(f) }} (not used)</span>
+            </div>
+
+            <div class="preview-frame mt-16" *ngIf="previewUrl()">
+              <iframe [src]="previewUrl()" title="Template preview"></iframe>
+            </div>
+          </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

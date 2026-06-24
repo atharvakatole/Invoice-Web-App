@@ -1,0 +1,169 @@
+<div class="fade-in">
+  <div class="page-header">
+    <div>
+      <h1>New Invoice</h1>
+      <p class="text-dim">Fill in client and item details to generate a GST-ready invoice.</p>
+    </div>
+    <a routerLink="/app/invoices" class="btn btn-ghost">← Back to Invoices</a>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="invoice-grid">
+    <div class="invoice-main">
+
+      <div class="card">
+        <div class="flex-between mb-16">
+          <h3>Client Details</h3>
+          <div class="flex gap-8">
+            <button type="button" class="btn btn-ghost btn-sm" *ngIf="clients().length" (click)="showAllClients()">★ Frequent Clients</button>
+            <button type="button" class="btn btn-ghost btn-sm" *ngIf="selectedClientId()" (click)="copyLastItems()">⤵ Copy Last Items</button>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Client Name</label>
+            <div class="autocomplete-wrap">
+              <input
+                formControlName="clientName"
+                placeholder="Jane Cooper"
+                (input)="onClientNameInput($any($event.target).value)"
+                (focus)="onClientNameInput(form.get('clientName')?.value || '')"
+                (blur)="hideClientSuggestions()"
+                autocomplete="off" />
+              <ul class="suggestions" *ngIf="showClientSuggestions() && clientSuggestions().length">
+                <li *ngFor="let c of clientSuggestions()" (mousedown)="selectClient(c)">
+                  <strong>{{ c.clientName }}</strong>
+                  <span class="text-faint"> · {{ c.invoiceCount }} invoice{{ c.invoiceCount === 1 ? '' : 's' }}</span>
+                </li>
+              </ul>
+            </div>
+            <span class="error" *ngIf="form.get('clientName')?.touched && form.get('clientName')?.invalid">Client name is required</span>
+          </div>
+          <div class="field">
+            <label>Client Email</label>
+            <input type="email" formControlName="clientEmail" placeholder="jane@client.com" />
+            <span class="error" *ngIf="form.get('clientEmail')?.touched && form.get('clientEmail')?.invalid">A valid email is required</span>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Client Phone</label>
+            <input formControlName="clientPhone" placeholder="+91 90000 00000" />
+          </div>
+          <div class="field">
+            <label>Due Date</label>
+            <input type="date" formControlName="dueDate" />
+            <span class="error" *ngIf="form.get('dueDate')?.touched && form.get('dueDate')?.invalid">Due date is required</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Client Address</label>
+          <textarea formControlName="clientAddress" rows="2" placeholder="Street, City, State, ZIP"></textarea>
+        </div>
+      </div>
+
+      <div class="card mt-24">
+        <div class="flex-between mb-16">
+          <h3>Line Items</h3>
+          <button type="button" class="btn btn-ghost btn-sm" (click)="addItem()">+ Add Item</button>
+        </div>
+
+        <div formArrayName="items">
+          <div class="item-row" *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
+          <div class="item-row-top">
+            <div class="field item-name">
+              <label>Item / Expense</label>
+              <div class="autocomplete-wrap">
+                <input
+                  formControlName="expenseName"
+                  placeholder="e.g. Website Design"
+                  (input)="onExpenseInput(i, $any($event.target).value)"
+                  (focus)="onExpenseInput(i, item.get('expenseName')?.value)"
+                  (blur)="hideSuggestions()"
+                  autocomplete="off" />
+                <ul class="suggestions" *ngIf="activeSuggestionRow() === i && expenseSuggestions().length">
+                  <li *ngFor="let s of expenseSuggestions()" (mousedown)="selectSuggestion(i, s)">{{ s }}</li>
+                </ul>
+              </div>
+            </div>
+            <div class="field item-project">
+              <label>Project</label>
+              <div class="autocomplete-wrap">
+                <input
+                  formControlName="projectName"
+                  placeholder="e.g. GPS Movie Promotions"
+                  (input)="onProjectInput(i, $any($event.target).value)"
+                  (focus)="onProjectInput(i, item.get('projectName')?.value || '')"
+                  (blur)="hideProjectSuggestions()"
+                  autocomplete="off" />
+                <ul class="suggestions" *ngIf="activeProjectRow() === i && projectSuggestions().length">
+                  <li *ngFor="let s of projectSuggestions()" (mousedown)="selectProjectSuggestion(i, s)">{{ s }}</li>
+                </ul>
+              </div>
+            </div>
+            <div class="field item-date">
+              <label>Date</label>
+              <input type="date" formControlName="itemDate" />
+            </div>
+          </div>
+          <div class="item-row-bottom">
+            <div class="field item-amount">
+              <label>Rate ₹</label>
+              <input type="number" min="0" step="0.01" formControlName="amount" placeholder="0.00" />
+            </div>
+            <div class="field item-qty">
+              <label>Qty</label>
+              <input type="number" min="1" step="1" formControlName="quantity" placeholder="1" />
+            </div>
+            <div class="field item-total">
+              <label>Total</label>
+              <div class="item-total-value mono">{{ (item.get('amount')?.value * item.get('quantity')?.value || 0) | currency:'INR' }}</div>
+            </div>
+            <button type="button" class="remove-btn" (click)="removeItem(i)" [disabled]="items.length === 1" title="Remove item">✕</button>
+          </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt-24">
+        <h3 class="mb-16">Tax & Notes</h3>
+        <label class="checkbox-row mb-16">
+          <input type="checkbox" formControlName="gstIncluded" style="width:auto" />
+          Apply GST to this invoice
+        </label>
+        <div class="field-row" *ngIf="form.get('gstIncluded')?.value">
+          <div class="field">
+            <label>GST Percentage (%)</label>
+            <input type="number" min="0" max="28" step="0.5" formControlName="gstPercentage" />
+          </div>
+          <div class="field"></div>
+        </div>
+        <div class="field">
+          <label>Notes (optional)</label>
+          <textarea formControlName="notes" rows="3" placeholder="Payment terms, bank details, thank-you note..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <aside class="invoice-summary">
+      <div class="card summary-card">
+        <h3 class="mb-16">Summary</h3>
+        <div class="summary-row"><span>Subtotal</span><span class="mono">{{ subtotal | currency:'INR' }}</span></div>
+        <div class="summary-row" *ngIf="form.get('gstIncluded')?.value">
+          <span>GST ({{ form.get('gstPercentage')?.value }}%)</span><span class="mono">{{ gstAmount | currency:'INR' }}</span>
+        </div>
+        <hr class="divider" />
+        <div class="summary-row total-row"><span>Total Amount</span><span class="mono text-gold">{{ total | currency:'INR' }}</span></div>
+
+        <button type="submit" class="btn btn-primary btn-block mt-24" [disabled]="submitting()">
+          {{ submitting() ? 'Creating Invoice...' : 'Create Invoice' }}
+        </button>
+        <p class="hint mt-16">The invoice number, date and PDF will be generated automatically once submitted.</p>
+      </div>
+
+      <div class="card mt-24 tip-card">
+        <h4>💡 Tip</h4>
+        <p>Start typing an item name to auto-suggest expenses you've billed before — saves time on recurring line items.</p>
+      </div>
+    </aside>
+  </form>
+</div>

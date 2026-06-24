@@ -1,0 +1,71 @@
+<div class="fade-in">
+  <a routerLink="/app/invoices" class="btn btn-ghost btn-sm mb-16">← Back to Invoices</a>
+
+  <div *ngIf="loading()" class="skeleton" style="height: 240px; width: 100%;"></div>
+
+  <ng-container *ngIf="!loading() && ledger() as data">
+    <div class="client-header card">
+      <div class="client-avatar">{{ initials(data.client.clientName) }}</div>
+      <div class="client-info">
+        <h1>{{ data.client.clientName }}</h1>
+        <p class="text-dim">{{ data.client.clientEmail }} <span *ngIf="data.client.clientPhone">· {{ data.client.clientPhone }}</span></p>
+      </div>
+      <div class="collection-ring" [style.--pct]="collectionPct()">
+        <span class="ring-value">{{ collectionPct() }}%</span>
+        <span class="ring-label">Collected</span>
+      </div>
+    </div>
+
+    <div class="stat-grid mt-24">
+      <div class="card stat-card">
+        <span class="stat-label">Total Invoices</span>
+        <span class="stat-value mono">{{ data.summary.totalInvoices }}</span>
+      </div>
+      <div class="card stat-card">
+        <span class="stat-label">Total Billed</span>
+        <span class="stat-value mono">{{ data.summary.totalBilled | currency:'INR':'symbol':'1.0-0' }}</span>
+      </div>
+      <div class="card stat-card">
+        <span class="stat-label">Total Paid</span>
+        <span class="stat-value mono text-green">{{ data.summary.totalPaid | currency:'INR':'symbol':'1.0-0' }}</span>
+      </div>
+      <div class="card stat-card">
+        <span class="stat-label">Pending Amount</span>
+        <span class="stat-value mono text-gold">{{ data.summary.pendingAmount | currency:'INR':'symbol':'1.0-0' }}</span>
+      </div>
+    </div>
+
+    <div class="card mt-24">
+      <h3 class="mb-16">Invoice History</h3>
+      <div class="table-wrap">
+        <table class="data-table" *ngIf="data.invoices.length; else emptyState">
+          <thead>
+            <tr>
+              <th>Invoice #</th>
+              <th>Date</th>
+              <th>Total</th>
+              <th>Paid</th>
+              <th>Remaining</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let inv of data.invoices">
+              <td class="mono">{{ inv.invoiceNumber }}</td>
+              <td>{{ inv.invoiceDate | date:'mediumDate' }}</td>
+              <td class="mono">{{ inv.totalAmount | currency:'INR' }}</td>
+              <td class="mono text-green">{{ inv.amountPaid | currency:'INR' }}</td>
+              <td class="mono text-gold">{{ inv.remainingAmount | currency:'INR' }}</td>
+              <td><span class="badge" [ngClass]="PaymentStatusBadge[inv.paymentStatus]">{{ PaymentStatusLabel[inv.paymentStatus] }}</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <ng-template #emptyState>
+          <div class="empty">
+            <p>No invoices found for this client yet.</p>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </ng-container>
+</div>

@@ -1,0 +1,62 @@
+<div class="fade-in">
+  <div class="page-header">
+    <div>
+      <h1>Notifications</h1>
+      <p class="text-dim">Return reminders, invoice alerts, assistant payments, and upcoming projects.</p>
+    </div>
+    <div class="flex gap-8">
+      <button class="btn btn-ghost btn-sm" *ngIf="unread()" (click)="markAllRead()">Mark all read</button>
+      <button class="btn btn-danger btn-sm" *ngIf="notifications().length" (click)="clearAll()">Clear all</button>
+    </div>
+  </div>
+
+  <div class="filter-tabs">
+    <button class="tab" [class.active]="!showUnreadOnly()" (click)="showUnreadOnly.set(false)">
+      All <span class="count">{{ notifications().length }}</span>
+    </button>
+    <button class="tab" [class.active]="showUnreadOnly()" (click)="showUnreadOnly.set(true)">
+      Unread <span class="count badge-pill" *ngIf="unread()">{{ unread() }}</span>
+    </button>
+  </div>
+
+  <div *ngIf="loading()" class="skeleton mt-16" style="height: 320px;"></div>
+
+  <div class="notif-list mt-16" *ngIf="!loading()">
+    <ng-container *ngIf="filtered().length; else emptyState">
+      <div
+        class="notif-card"
+        *ngFor="let n of filtered()"
+        [class.unread]="!n.isRead"
+        (click)="markRead(n)">
+
+        <div class="notif-icon" [ngClass]="colorClass(n.type)">
+          {{ icon(n.type) }}
+        </div>
+
+        <div class="notif-body">
+          <div class="notif-title">{{ n.title }}</div>
+          <p class="notif-message">{{ n.message }}</p>
+          <div class="notif-meta">
+            <span class="text-faint">{{ n.createdAt | date:'dd MMM · h:mm a' }}</span>
+            <a *ngIf="n.linkPath" [routerLink]="n.linkPath" class="notif-link" (click)="$event.stopPropagation()">
+              View →
+            </a>
+          </div>
+        </div>
+
+        <div class="notif-actions">
+          <span class="unread-dot" *ngIf="!n.isRead"></span>
+          <button class="del-btn" (click)="$event.stopPropagation(); delete(n)" title="Dismiss">✕</button>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #emptyState>
+      <div class="empty">
+        <div class="empty-icon">🔔</div>
+        <h3>All caught up!</h3>
+        <p>No notifications right now. We'll alert you about due returns, overdue invoices, upcoming projects, and unpaid assistants.</p>
+      </div>
+    </ng-template>
+  </div>
+</div>

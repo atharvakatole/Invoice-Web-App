@@ -1,0 +1,23 @@
+.social-login { margin-top: 20px; }
+
+.divider {
+  display: flex; align-items: center; gap: 12px;
+  color: var(--text-faint); font-size: 12px; text-transform: uppercase; letter-spacing: .08em;
+  margin-bottom: 16px;
+}
+.divider::before, .divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+
+.social-buttons { display: flex; flex-direction: column; gap: 10px; }
+
+.google-btn-slot { width: 100%; min-height: 44px; }
+.google-btn-slot iframe { width: 100% !important; }
+
+.social-btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.social-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 20px; height: 20px; font-weight: 700; font-size: 14px;
+}

@@ -1,0 +1,29 @@
+<div class="auth-card fade-in">
+  <h2>Sign in</h2>
+  <p class="text-dim">Enter your credentials to access your invoicing dashboard.</p>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="mt-24">
+    <div class="field">
+      <label>Email</label>
+      <input type="email" formControlName="email" placeholder="you@business.com" autocomplete="email" />
+      <span class="error" *ngIf="form.get('email')?.touched && form.get('email')?.invalid">Enter a valid email address</span>
+    </div>
+
+    <div class="field">
+      <label>Password</label>
+      <div class="password-wrap">
+        <input [type]="showPassword() ? 'text' : 'password'" formControlName="password" placeholder="••••••••" autocomplete="current-password" />
+        <button type="button" class="toggle-pass" (click)="showPassword.set(!showPassword())">{{ showPassword() ? 'Hide' : 'Show' }}</button>
+      </div>
+      <span class="error" *ngIf="form.get('password')?.touched && form.get('password')?.invalid">Password must be at least 6 characters</span>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block" [disabled]="loading()">
+      {{ loading() ? 'Signing in...' : 'Sign in' }}
+    </button>
+  </form>
+
+  <app-social-login></app-social-login>
+
+  <p class="switch-link">Don't have an account? <a routerLink="/register">Create one</a></p>
+</div>

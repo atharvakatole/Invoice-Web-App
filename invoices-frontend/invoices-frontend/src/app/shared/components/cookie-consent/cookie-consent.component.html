@@ -1,0 +1,36 @@
+<div class="cookie-banner" *ngIf="consent.showBanner()" role="dialog" aria-label="Cookie consent">
+  <div class="cookie-inner">
+    <div class="cookie-text">
+      <div class="cookie-title">🍪 We use cookies</div>
+      <p>
+        We use cookies to remember your preferences (like your chosen theme) and to understand how the site is used.
+        You can accept all, keep only essential ones, or reject non-essential cookies.
+      </p>
+
+      <div class="cookie-details" *ngIf="showDetails()">
+        <div class="cookie-row">
+          <strong>Essential</strong>
+          <span>Required for the site to function (login, security). Always on.</span>
+        </div>
+        <div class="cookie-row">
+          <strong>Functional</strong>
+          <span>Remembers your theme and layout preferences.</span>
+        </div>
+        <div class="cookie-row">
+          <strong>Analytics</strong>
+          <span>Anonymous usage statistics to help us improve.</span>
+        </div>
+      </div>
+
+      <button class="link-btn" (click)="showDetails.set(!showDetails())">
+        {{ showDetails() ? 'Hide details' : 'Customize / learn more' }}
+      </button>
+    </div>
+
+    <div class="cookie-actions">
+      <button class="btn btn-ghost btn-sm" (click)="consent.accept('rejected')">Reject non-essential</button>
+      <button class="btn btn-ghost btn-sm" (click)="consent.accept('functional')">Essential only</button>
+      <button class="btn btn-primary btn-sm" (click)="consent.accept('all')">Accept all</button>
+    </div>
+  </div>
+</div>

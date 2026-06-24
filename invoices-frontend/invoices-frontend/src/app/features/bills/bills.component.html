@@ -1,0 +1,275 @@
+<div class="fade-in">
+  <div class="page-header">
+    <div>
+      <h1>Bills</h1>
+      <p class="text-dim">Track what you spend on brands per project — returns, client sales, and draft invoices all in one place.</p>
+    </div>
+    <button class="btn btn-primary" (click)="openCreate()">+ Add Bill</button>
+  </div>
+
+  <div class="summary-strip">
+    <div class="summary-chip"><span class="text-faint">Total Spent</span><strong class="mono text-gold">{{ totals().spent | currency:'INR':'symbol':'1.0-0' }}</strong></div>
+    <div class="summary-chip"><span class="text-faint">Refunded</span><strong class="mono text-green">{{ totals().refunded | currency:'INR':'symbol':'1.0-0' }}</strong></div>
+    <div class="summary-chip"><span class="text-faint">Sold to Clients</span><strong class="mono text-accent">{{ totals().bought | currency:'INR':'symbol':'1.0-0' }}</strong></div>
+    <div class="summary-chip"><span class="text-faint">Pending</span><strong class="mono text-red">{{ totals().pending | currency:'INR':'symbol':'1.0-0' }}</strong></div>
+  </div>
+
+  <div class="filter-row">
+    <select [ngModel]="filterProject()" (ngModelChange)="filterProject.set($event)">
+      <option value="">All Projects</option>
+      <option *ngFor="let p of projects()" [value]="p">{{ p }}</option>
+    </select>
+    <input type="text" placeholder="Filter by brand..." [ngModel]="filterBrand()" (ngModelChange)="filterBrand.set($event)" />
+  </div>
+
+  <div *ngIf="loading()" class="skeleton mt-16" style="height: 320px;"></div>
+
+  <div class="bills-list mt-16" *ngIf="!loading()">
+    <div *ngIf="!filtered().length" class="empty">
+      <div class="empty-icon">🧾</div>
+      <h3>No bills yet</h3>
+      <p>Track what you buy or rent from brands for each project.</p>
+      <button class="btn btn-primary btn-sm" (click)="openCreate()">+ Add Bill</button>
+    </div>
+
+    <div class="bill-card card" *ngFor="let bill of filtered()">
+      <div class="bill-header">
+        <div class="bill-meta">
+          <strong class="bill-brand">{{ bill.brandName }}</strong>
+          <span class="badge badge-partial">{{ bill.projectName }}</span>
+          <span class="text-faint">{{ bill.billDate | date:'mediumDate' }} · {{ bill.paidWith }}</span>
+        </div>
+        <div class="bill-totals">
+          <span class="mono text-faint">Total: <strong class="text-gold">{{ bill.totalCost | currency:'INR' }}</strong></span>
+          <span class="mono text-faint" *ngIf="bill.totalRefunded"> · Refunded: <strong class="text-green">{{ bill.totalRefunded | currency:'INR' }}</strong></span>
+          <span class="mono text-faint" *ngIf="bill.totalBought"> · Sold: <strong>{{ bill.totalBought | currency:'INR' }}</strong></span>
+        </div>
+        <div class="bill-actions">
+          <button class="btn btn-ghost btn-sm" (click)="openEdit(bill)">Edit</button>
+          <button class="btn btn-danger btn-sm" (click)="deleteBill(bill)">Delete</button>
+        </div>
+      </div>
+
+      <div class="items-table">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Qty</th>
+              <th>Price</th>
+              <th>Returned</th>
+              <th>Sold</th>
+              <th>Status</th>
+              <th>Photo</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of bill.items" [class.overdue-row]="isOverdue(item)">
+              <td>
+                <div class="item-name-cell">
+                  <strong>{{ item.itemName }}</strong>
+                  <span class="text-faint" style="font-size:11.5px" *ngIf="item.boughtByClientName">
+                    🛍 Sold to {{ item.boughtByClientName }}
+                  </span>
+                  <span class="text-faint" style="font-size:11.5px" *ngIf="item.draftInvoiceId">
+                    📄 <a [routerLink]="['/app/invoices']" class="notif-link">Draft invoice created</a>
+                  </span>
+                </div>
+              </td>
+              <td class="mono">{{ item.quantity }}</td>
+              <td class="mono">{{ item.pricePerItem | currency:'INR' }}</td>
+              <td>
+                <span class="mono text-green" *ngIf="item.quantityReturned">{{ item.quantityReturned }} ({{ item.amountRefunded | currency:'INR' }})</span>
+                <span class="text-faint" *ngIf="!item.quantityReturned">—</span>
+              </td>
+              <td>
+                <span class="mono" *ngIf="item.quantityBoughtByClient">{{ item.quantityBoughtByClient }} ({{ item.amountBoughtByClient | currency:'INR' }})</span>
+                <span class="text-faint" *ngIf="!item.quantityBoughtByClient">—</span>
+              </td>
+              <td>
+                <span class="item-status" *ngIf="item.quantityPending > 0" [class.text-red]="isOverdue(item)">
+                  {{ item.quantityPending }} pending
+                  <span *ngIf="item.returnByDate && item.isRefundable"> · due {{ item.returnByDate | date:'shortDate' }}</span>
+                </span>
+                <span class="badge badge-paid" *ngIf="item.quantityPending <= 0">Done</span>
+              </td>
+              <td>
+                <div class="photo-cell">
+                  <img *ngIf="item.hasImage" [src]="itemImageUrl(bill.id, item.id)" class="item-thumb" alt="Item" />
+                  <input type="file" [id]="'img-'+item.id" accept="image/*" (change)="onItemImageUpload(bill, item, $event)" hidden />
+                  <label [for]="'img-'+item.id" class="btn btn-ghost btn-sm">{{ item.hasImage ? '✏' : '+' }}</label>
+                </div>
+              </td>
+              <td>
+                <div class="row-actions">
+                  <button class="btn btn-ghost btn-sm" *ngIf="item.isRefundable && item.quantityPending > 0" (click)="openReturn(bill, item)">Return</button>
+                  <button class="btn btn-ghost btn-sm" *ngIf="item.quantityPending > 0" (click)="openSell(bill, item)">Sell to Client</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ Add/Edit Bill Modal ══ -->
+<div class="modal-backdrop" *ngIf="showBillForm()" (click)="showBillForm.set(false)">
+  <div class="modal card large-modal" (click)="$event.stopPropagation()">
+    <h3>{{ editingBillId() ? 'Edit Bill' : 'Add Bill' }}</h3>
+
+    <div class="field-row mt-16">
+      <div class="field">
+        <label>Project</label>
+        <select [ngModel]="billForm().projectName" (ngModelChange)="setBillField('projectName', $event)">
+          <option value="" disabled>Select project</option>
+          <option *ngFor="let p of projects()" [value]="p">{{ p }}</option>
+          <option value="__custom__">+ New project...</option>
+        </select>
+        <input *ngIf="billForm().projectName === '__custom__'" type="text" class="mt-8"
+          [ngModel]="billForm().customProject" (ngModelChange)="setBillField('customProject', $event)" placeholder="Project name" />
+      </div>
+      <div class="field">
+        <label>Brand Name</label>
+        <input type="text" [ngModel]="billForm().brandName" (ngModelChange)="setBillField('brandName', $event)" placeholder="e.g. Zara" />
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label>Bill Date</label>
+        <input type="date" [ngModel]="billForm().billDate" (ngModelChange)="setBillField('billDate', $event)" />
+      </div>
+      <div class="field">
+        <label>Paid With</label>
+        <select [ngModel]="billForm().paidWith" (ngModelChange)="setBillField('paidWith', $event)">
+          <option *ngFor="let m of paymentMethods" [value]="m">{{ m }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Notes (optional)</label>
+      <input type="text" [ngModel]="billForm().notes" (ngModelChange)="setBillField('notes', $event)" placeholder="Any additional info" />
+    </div>
+
+    <div class="items-form mt-16">
+      <div class="flex-between mb-12">
+        <h4>Items</h4>
+        <button type="button" class="btn btn-ghost btn-sm" (click)="addItemRow()">+ Add Item</button>
+      </div>
+
+      <div class="item-form-row" *ngFor="let row of itemRows(); let i = index">
+        <div class="item-row-top">
+          <div class="field">
+            <label>Item Name</label>
+            <input type="text" [ngModel]="row.itemName" (ngModelChange)="setItemField(i, 'itemName', $event)" placeholder="e.g. Red Lehenga" />
+          </div>
+          <div class="field">
+            <label>Qty</label>
+            <input type="number" min="1" [ngModel]="row.quantity" (ngModelChange)="setItemField(i, 'quantity', +$event)" />
+          </div>
+          <div class="field">
+            <label>Price/item ₹</label>
+            <input type="number" min="0" step="0.01" [ngModel]="row.pricePerItem" (ngModelChange)="setItemField(i, 'pricePerItem', +$event)" placeholder="0.00" />
+          </div>
+          <button type="button" class="remove-btn" (click)="removeItemRow(i)" *ngIf="itemRows().length > 1">✕</button>
+        </div>
+        <div class="item-row-bottom">
+          <label class="checkbox-row">
+            <input type="checkbox" style="width:auto" [ngModel]="row.isRefundable" (ngModelChange)="setItemField(i, 'isRefundable', $event)" />
+            Refundable/Rented
+          </label>
+          <div class="field" *ngIf="row.isRefundable">
+            <label>Return By</label>
+            <input type="date" [ngModel]="row.returnByDate" (ngModelChange)="setItemField(i, 'returnByDate', $event)" />
+          </div>
+          <div class="field">
+            <label>Photo (optional)</label>
+            <div class="photo-preview-row">
+              <img *ngIf="row.previewUrl" [src]="row.previewUrl" class="item-thumb" alt="Preview" />
+              <input type="file" [id]="'new-img-'+i" accept="image/*" (change)="onItemImageSelected(i, $event)" hidden />
+              <label [for]="'new-img-'+i" class="btn btn-ghost btn-sm">{{ row.previewUrl ? 'Change' : '+ Photo' }}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex gap-12 mt-20">
+      <button class="btn btn-ghost btn-block" (click)="showBillForm.set(false)">Cancel</button>
+      <button class="btn btn-primary btn-block" [disabled]="saving()" (click)="saveBill()">
+        {{ saving() ? 'Saving...' : (editingBillId() ? 'Save Changes' : 'Add Bill') }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ Return Modal ══ -->
+<div class="modal-backdrop" *ngIf="returnModal() as rm" (click)="closeReturn()">
+  <div class="modal card" (click)="$event.stopPropagation()">
+    <h3>Return Items</h3>
+    <p class="text-dim mt-8">
+      Returning <strong>{{ rm.item.itemName }}</strong> to {{ rm.bill.brandName }}.
+      {{ maxReturnable() }} unit(s) available to return.
+    </p>
+
+    <div class="field mt-16">
+      <label>Quantity to Return</label>
+      <input type="number" min="1" [max]="maxReturnable()" [ngModel]="returnQty()" (ngModelChange)="returnQty.set(+$event)" />
+    </div>
+
+    <div class="refund-preview mt-8">
+      Refund amount: <strong class="text-green">{{ (returnQty() * rm.item.pricePerItem) | currency:'INR' }}</strong>
+    </div>
+
+    <div class="flex gap-12 mt-16">
+      <button class="btn btn-ghost btn-block" (click)="closeReturn()">Cancel</button>
+      <button class="btn btn-primary btn-block" [disabled]="returningItem()" (click)="submitReturn()">
+        {{ returningItem() ? 'Processing...' : 'Confirm Return' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ Sell to Client Modal ══ -->
+<div class="modal-backdrop" *ngIf="sellModal() as sm" (click)="closeSell()">
+  <div class="modal card" (click)="$event.stopPropagation()">
+    <h3>Sell to Client</h3>
+    <p class="text-dim mt-8">
+      <strong>{{ sm.item.itemName }}</strong> · {{ maxSellable() }} unit(s) available.
+      A draft invoice will be created/updated for this client.
+    </p>
+
+    <div class="field mt-16">
+      <label>Quantity to Sell</label>
+      <input type="number" min="1" [max]="maxSellable()" [ngModel]="sellQty()" (ngModelChange)="sellQty.set(+$event)" />
+    </div>
+
+    <div class="field">
+      <label>Client</label>
+      <div class="autocomplete-wrap">
+        <input type="text" [ngModel]="sellClientName()" (ngModelChange)="onSellClientInput($event)"
+          (blur)="showClientDrop.set(false)" placeholder="Type client name" autocomplete="off" />
+        <ul class="suggestions" *ngIf="showClientDrop() && clientSuggestions().length">
+          <li *ngFor="let c of clientSuggestions()" (mousedown)="selectSellClient(c)">
+            {{ c.clientName }} <span class="text-faint">· {{ c.invoiceCount }} invoices</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sale-preview mt-8">
+      Sale amount: <strong class="text-accent">{{ (sellQty() * sm.item.pricePerItem) | currency:'INR' }}</strong>
+    </div>
+
+    <div class="flex gap-12 mt-16">
+      <button class="btn btn-ghost btn-block" (click)="closeSell()">Cancel</button>
+      <button class="btn btn-primary btn-block" [disabled]="sellingItem()" (click)="submitSell()">
+        {{ sellingItem() ? 'Processing...' : 'Confirm Sale + Create Draft Invoice' }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,35 @@
+# .NET
+bin/
+obj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Angular
+node_modules/
+dist/
+.angular/
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# Environment files
+.env
+
+# Build outputs
+publish/
+
+# OS files
+Thumbs.db
+Desktop.ini
+
+# Package lock files (optional)
+npm-debug.log*
+
+# Secrets
+appsettings.Development.json

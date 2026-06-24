@@ -1,0 +1,146 @@
+<div class="fade-in">
+  <div class="page-header">
+    <div>
+      <h1>Assistants</h1>
+      <p class="text-dim">Track who helped you on each project, which days they worked, and whether they've been paid.</p>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3 class="mb-16">Log a Project Assignment</h3>
+
+      <div class="field">
+        <label>Assistant</label>
+        <div class="seg">
+          <button type="button" class="seg-btn" [class.active]="assistantMode() === 'new'" (click)="assistantMode.set('new')">New Assistant</button>
+          <button type="button" class="seg-btn" [class.active]="assistantMode() === 'existing'" (click)="assistantMode.set('existing')" [disabled]="!assistants().length">Existing</button>
+        </div>
+      </div>
+
+      <ng-container *ngIf="assistantMode() === 'new'">
+        <div class="field-row">
+          <div class="field">
+            <label>Name</label>
+            <input type="text" [ngModel]="newAssistantName()" (ngModelChange)="newAssistantName.set($event)" placeholder="e.g. Riya Shah" />
+          </div>
+          <div class="field">
+            <label>Phone (optional)</label>
+            <input type="text" [ngModel]="newAssistantPhone()" (ngModelChange)="newAssistantPhone.set($event)" placeholder="+91 90000 00000" />
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="assistantMode() === 'existing'">
+        <div class="field">
+          <label>Select Assistant</label>
+          <select [ngModel]="selectedAssistantId()" (ngModelChange)="selectedAssistantId.set($event)">
+            <option value="" disabled>Choose an assistant</option>
+            <option *ngFor="let a of assistants()" [value]="a.id">{{ a.name }}</option>
+          </select>
+        </div>
+      </ng-container>
+
+      <div class="field">
+        <label>Project Name</label>
+        <input type="text" [ngModel]="projectName()" (ngModelChange)="projectName.set($event)" placeholder="e.g. GPS Movie Promotions" />
+      </div>
+
+      <div class="field">
+        <label>Work Dates</label>
+        <div class="date-add-row">
+          <input type="date" [ngModel]="newDate()" (ngModelChange)="newDate.set($event)" />
+          <button type="button" class="btn btn-ghost btn-sm" (click)="addDate()">+ Add Date</button>
+        </div>
+        <div class="date-chips" *ngIf="workDates().length">
+          <span class="chip" *ngFor="let d of workDates()">
+            {{ d | date:'mediumDate' }}
+            <button type="button" (click)="removeDate(d)">✕</button>
+          </span>
+        </div>
+        <span class="hint" *ngIf="!workDates().length">Add each day the assistant was hired for this project.</span>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Fee (₹)</label>
+          <input type="number" min="0" step="0.01" [ngModel]="fee()" (ngModelChange)="fee.set($event)" placeholder="0.00" />
+        </div>
+        <div class="field">
+          <label>Payment Status</label>
+          <label class="checkbox-row mt-8">
+            <input type="checkbox" style="width:auto" [ngModel]="isPaid()" (ngModelChange)="isPaid.set($event)" />
+            Already paid
+          </label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Notes (optional)</label>
+        <textarea rows="2" [ngModel]="notes()" (ngModelChange)="notes.set($event)" placeholder="Anything else worth remembering"></textarea>
+      </div>
+
+      <button type="button" class="btn btn-primary btn-block" [disabled]="submitting()" (click)="submit()">
+        {{ submitting() ? 'Saving...' : '+ Add Assignment' }}
+      </button>
+    </div>
+
+    <div class="card">
+      <div class="flex-between mb-16">
+        <h3>Assignments</h3>
+        <div class="flex gap-8">
+          <input type="text" class="search-input" placeholder="Search name or project..."
+            [ngModel]="filterName()" (ngModelChange)="filterName.set($event)" style="width:180px;padding:8px 12px" />
+          <select class="filter-select" [ngModel]="filterPaid()" (ngModelChange)="filterPaid.set($event)">
+          <option value="all">All</option>
+          <option value="unpaid">Unpaid</option>
+          <option value="paid">Paid</option>
+        </select>
+        </div>
+      </div>
+
+      <div *ngIf="loading()" class="skeleton" style="height: 320px; width: 100%;"></div>
+
+      <div class="table-wrap" *ngIf="!loading()">
+        <table class="data-table" *ngIf="filteredAssignments().length; else emptyState">
+          <thead>
+            <tr>
+              <th>Assistant</th>
+              <th>Project</th>
+              <th>Dates</th>
+              <th>Fee</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let a of filteredAssignments()">
+              <td>{{ a.assistantName }}</td>
+              <td>{{ a.projectName }}</td>
+              <td class="text-dim" style="font-size:12px;">
+                {{ a.workDates.length }} day{{ a.workDates.length === 1 ? '' : 's' }}
+                <span class="text-faint"> · {{ a.workDates[0] | date:'MMM d' }}<ng-container *ngIf="a.workDates.length > 1"> – {{ a.workDates[a.workDates.length-1] | date:'MMM d' }}</ng-container></span>
+              </td>
+              <td class="mono">{{ a.fee | currency:'INR' }}</td>
+              <td>
+                <span class="badge" [ngClass]="a.isPaid ? 'badge-paid' : 'badge-pending'" style="cursor:pointer" (click)="togglePaid(a)">
+                  {{ a.isPaid ? 'Paid' : 'Unpaid' }}
+                </span>
+              </td>
+              <td>
+                <button class="btn btn-danger btn-sm" (click)="deleteAssignment(a)">Remove</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <ng-template #emptyState>
+          <div class="empty">
+            <div class="empty-icon">🧑‍🤝‍🧑</div>
+            <h3>No assignments yet</h3>
+            <p>Log your first assistant assignment using the form.</p>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

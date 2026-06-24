@@ -1,0 +1,44 @@
+<div class="fade-in">
+  <div class="page-header">
+    <div>
+      <h1>Admin Console</h1>
+      <p class="text-dim">Platform-wide overview across all businesses and users.</p>
+    </div>
+    <span class="badge badge-paid">Super Admin</span>
+  </div>
+
+  <div *ngIf="loading()" class="skeleton" style="height: 240px; width: 100%;"></div>
+
+  <div class="admin-grid" *ngIf="!loading() && data() as d">
+    <div class="card admin-card">
+      <span class="ico">👥</span>
+      <span class="stat-label">Total Users</span>
+      <span class="stat-value mono">{{ d.totalUsers }}</span>
+    </div>
+    <div class="card admin-card">
+      <span class="ico">🏢</span>
+      <span class="stat-label">Total Businesses</span>
+      <span class="stat-value mono">{{ d.totalBusinesses }}</span>
+    </div>
+    <div class="card admin-card">
+      <span class="ico">🧾</span>
+      <span class="stat-label">Total Invoices</span>
+      <span class="stat-value mono">{{ d.totalInvoices }}</span>
+    </div>
+    <div class="card admin-card">
+      <span class="ico">💎</span>
+      <span class="stat-label">Premium Users</span>
+      <span class="stat-value mono text-gold">{{ d.premiumUsers }}</span>
+    </div>
+    <div class="card admin-card wide">
+      <span class="ico">💰</span>
+      <span class="stat-label">Total Revenue (Paid)</span>
+      <span class="stat-value mono text-green">{{ d.totalRevenue | currency:'INR' }}</span>
+    </div>
+    <div class="card admin-card wide">
+      <span class="ico">⏳</span>
+      <span class="stat-label">Pending Revenue</span>
+      <span class="stat-value mono text-gold">{{ d.pendingRevenue | currency:'INR' }}</span>
+    </div>
+  </div>
+</div>

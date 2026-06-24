@@ -1,0 +1,114 @@
+<div class="fade-in">
+  <div class="page-header">
+    <div>
+      <h1>Clients</h1>
+      <p class="text-dim">Everyone you've invoiced — search, edit details, or jump into their ledger.</p>
+    </div>
+    <button class="btn btn-primary" (click)="openCreate()">+ New Client</button>
+  </div>
+
+  <div class="summary-strip">
+    <div class="summary-chip">
+      <span class="text-faint">Total Clients</span>
+      <strong class="mono">{{ totals().count }}</strong>
+    </div>
+    <div class="summary-chip">
+      <span class="text-faint">Revenue Collected</span>
+      <strong class="mono text-green">{{ totals().revenue | currency:'INR':'symbol':'1.0-0' }}</strong>
+    </div>
+    <div class="summary-chip">
+      <span class="text-faint">Pending Across Clients</span>
+      <strong class="mono text-gold">{{ totals().pending | currency:'INR':'symbol':'1.0-0' }}</strong>
+    </div>
+  </div>
+
+  <div class="card">
+    <input class="search-input" type="text" placeholder="Search by name, email, or phone..." [ngModel]="search()" (ngModelChange)="search.set($event)" />
+
+    <div class="table-wrap mt-16" *ngIf="!loading(); else skeleton">
+      <table class="data-table" *ngIf="filtered().length; else emptyState">
+        <thead>
+          <tr>
+            <th>Client</th>
+            <th>Contact</th>
+            <th>Invoices</th>
+            <th>Revenue Collected</th>
+            <th>Pending</th>
+            <th>Last Invoice</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let c of filtered()">
+            <td>
+              <div class="client-cell">
+                <div class="avatar-sm">{{ initials(c.clientName) }}</div>
+                <span>{{ c.clientName }}</span>
+              </div>
+            </td>
+            <td class="text-dim" style="font-size:12.5px;">
+              <div>{{ c.clientEmail }}</div>
+              <div *ngIf="c.clientPhone">{{ c.clientPhone }}</div>
+            </td>
+            <td class="mono">{{ c.invoiceCount }}</td>
+            <td class="mono text-green">{{ c.totalRevenue | currency:'INR' }}</td>
+            <td class="mono text-gold">{{ c.pendingAmount | currency:'INR' }}</td>
+            <td>{{ c.lastInvoiceDate | date:'mediumDate' }}</td>
+            <td>
+              <div class="row-actions">
+                <a class="btn btn-ghost btn-sm" [routerLink]="['/app/clients', c.id, 'ledger']">Ledger</a>
+                <button class="btn btn-ghost btn-sm" (click)="openEdit(c)">Edit</button>
+                <button class="btn btn-danger btn-sm" *ngIf="c.invoiceCount === 0" (click)="deleteClient(c)">Delete</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <ng-template #emptyState>
+        <div class="empty">
+          <div class="empty-icon">👥</div>
+          <h3>No clients yet</h3>
+          <p>Clients are created automatically the first time you invoice them.</p>
+          <a routerLink="/app/invoices/new" class="btn btn-primary btn-sm">+ Create Invoice</a>
+        </div>
+      </ng-template>
+    </div>
+
+    <ng-template #skeleton>
+      <div class="skeleton mt-16" style="height: 320px; width: 100%;"></div>
+    </ng-template>
+  </div>
+</div>
+
+<!-- Edit / Create Client Modal -->
+<div class="modal-backdrop" *ngIf="editTarget() || isCreating()" (click)="closeEdit()">
+  <div class="modal card" (click)="$event.stopPropagation()">
+    <h3>{{ isCreating() ? 'New Client' : 'Edit Client' }}</h3>
+    <p class="text-dim">{{ isCreating() ? 'Add a new client to your business.' : 'Update ' + editTarget()?.clientName + '\'s contact details.' }}</p>
+
+    <div class="field mt-16">
+      <label>Client Name</label>
+      <input type="text" [ngModel]="editForm().clientName" (ngModelChange)="setField('clientName', $event)" />
+    </div>
+    <div class="field">
+      <label>Email</label>
+      <input type="email" [ngModel]="editForm().clientEmail" (ngModelChange)="setField('clientEmail', $event)" />
+    </div>
+    <div class="field">
+      <label>Phone</label>
+      <input type="text" [ngModel]="editForm().clientPhone" (ngModelChange)="setField('clientPhone', $event)" />
+    </div>
+    <div class="field">
+      <label>Address</label>
+      <textarea rows="2" [ngModel]="editForm().clientAddress" (ngModelChange)="setField('clientAddress', $event)"></textarea>
+    </div>
+
+    <div class="flex gap-12 mt-16">
+      <button class="btn btn-ghost btn-block" (click)="closeEdit()">Cancel</button>
+      <button class="btn btn-primary btn-block" [disabled]="saving()" (click)="saveEdit()">
+        {{ saving() ? 'Saving...' : (isCreating() ? 'Create Client' : 'Save Changes') }}
+      </button>
+    </div>
+  </div>
+</div>

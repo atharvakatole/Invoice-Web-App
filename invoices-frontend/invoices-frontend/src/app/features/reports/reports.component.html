@@ -1,0 +1,63 @@
+<div class="fade-in">
+  <div class="page-header">
+    <div>
+      <h1>Reports & GST</h1>
+      <p class="text-dim">Review your GST collection trends and export fiscal year reports.</p>
+    </div>
+  </div>
+
+  <div class="card hero-gst">
+    <div>
+      <span class="text-faint" style="font-size:12px;text-transform:uppercase;letter-spacing:.08em;">Total GST Collected</span>
+      <h1 class="mono text-gold gst-amount">{{ (gst()?.totalGSTCollected ?? 0) | currency:'INR' }}</h1>
+      <p class="text-dim">Across all GST-included invoices to date.</p>
+    </div>
+    <div class="export-actions">
+      <button class="btn btn-primary" (click)="exportExcel()" [disabled]="exportingExcel()">
+        {{ exportingExcel() ? 'Preparing...' : '⬇ Export Excel (.xlsx)' }}
+      </button>
+      <button class="btn btn-ghost" (click)="exportPdf()" [disabled]="exportingPdf()">
+        {{ exportingPdf() ? 'Preparing...' : '⬇ Export PDF Report' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="card mt-24">
+    <h3 class="mb-16">Monthly GST Collected</h3>
+    <div *ngIf="!loading(); else chartSkeleton">
+      <div class="chart" *ngIf="chartBars().length; else emptyChart">
+        <div class="bar-col" *ngFor="let bar of chartBars()">
+          <div class="bar-track"><div class="bar-fill" [style.height.%]="bar.pct"></div></div>
+          <span class="bar-label">{{ bar.name }}</span>
+        </div>
+      </div>
+      <ng-template #emptyChart>
+        <div class="empty"><p>No GST data recorded for this year yet.</p></div>
+      </ng-template>
+    </div>
+    <ng-template #chartSkeleton>
+      <div class="skeleton" style="height: 200px; width: 100%;"></div>
+    </ng-template>
+  </div>
+
+  <div class="card mt-24">
+    <h3 class="mb-16">Monthly Breakdown</h3>
+    <div class="table-wrap">
+      <table class="data-table" *ngIf="rows().length; else emptyState">
+        <thead>
+          <tr><th>Month</th><th>Revenue</th><th>GST Collected</th></tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of rows()">
+            <td>{{ row.name }}</td>
+            <td class="mono">{{ row.revenue | currency:'INR' }}</td>
+            <td class="mono text-gold">{{ row.gstCollected | currency:'INR' }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <ng-template #emptyState>
+        <div class="empty"><p>Nothing to show yet — create some invoices with GST applied.</p></div>
+      </ng-template>
+    </div>
+  </div>
+</div>

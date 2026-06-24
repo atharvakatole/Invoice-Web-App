@@ -1,0 +1,74 @@
+<div class="fade-in">
+  <div class="page-header">
+    <div>
+      <h1>Billing & Plan</h1>
+      <p class="text-dim">Manage your subscription and view what's included.</p>
+    </div>
+  </div>
+
+  <div *ngIf="loadingStatus()" class="skeleton" style="height: 320px;"></div>
+
+  <ng-container *ngIf="!loadingStatus() && subscription() as sub">
+
+    <!-- ── PREMIUM: current plan card ── -->
+    <div class="plan-status card" *ngIf="sub.isPremium">
+      <div class="plan-badge premium">⭐ Premium</div>
+      <h2 class="mt-8">You're on the Premium plan</h2>
+      <p class="text-dim">Your plan renews on <strong>{{ sub.nextBillingDate | date:'dd MMM yyyy' }}</strong>.</p>
+
+      <div class="benefits-grid mt-24">
+        <div class="benefit-item" *ngFor="let b of sub.premiumBenefits">
+          <span class="benefit-check">✓</span>
+          <span>{{ b }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TRIAL / FREE: plan picker ── -->
+    <ng-container *ngIf="!sub.isPremium">
+      <div class="trial-banner card" *ngIf="sub.isTrial && !sub.isExpired">
+        <div class="plan-badge trial">Trial</div>
+        <p class="mt-8">Your trial runs until <strong>{{ sub.expiryDate | date:'dd MMM yyyy' }}</strong>. Upgrade before it expires to keep access to all features.</p>
+      </div>
+
+      <div class="trial-banner card expired" *ngIf="sub.isExpired">
+        <div class="plan-badge free">Plan Expired</div>
+        <p class="mt-8">Your trial has ended. Upgrade to Premium to continue creating invoices and accessing all features.</p>
+      </div>
+
+      <div class="plans-row mt-24">
+        <!-- Free plan -->
+        <div class="plan-card card">
+          <div class="plan-header">
+            <div class="plan-badge free">Free</div>
+            <div class="plan-price">₹0 <span class="plan-period">/month</span></div>
+          </div>
+          <p class="text-dim plan-tagline">For trying things out</p>
+          <ul class="feature-list">
+            <li *ngFor="let f of freeFeatures"><span class="check">✓</span> {{ f }}</li>
+          </ul>
+          <button class="btn btn-ghost btn-block mt-16" disabled>Current base plan</button>
+        </div>
+
+        <!-- Premium plan -->
+        <div class="plan-card card highlight">
+          <div class="plan-header">
+            <div class="plan-badge premium">⭐ Premium</div>
+            <div class="plan-price">₹{{ premiumAmount }} <span class="plan-period">/month</span></div>
+          </div>
+          <p class="text-dim plan-tagline">Everything you need to run your business</p>
+          <ul class="feature-list">
+            <li *ngFor="let b of sub.premiumBenefits"><span class="check accent">✓</span> {{ b }}</li>
+          </ul>
+          <button
+            class="btn btn-primary btn-block mt-16"
+            [disabled]="processing()"
+            (click)="upgrade()">
+            {{ processing() ? 'Opening payment...' : 'Upgrade to Premium — ₹' + premiumAmount }}
+          </button>
+          <p class="secure-note">🔒 Secure payment via Razorpay · Cancel anytime</p>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+</div>
