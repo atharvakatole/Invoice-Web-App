@@ -1,0 +1,118 @@
+<div class="fade-in">
+  <div class="page-header">
+    <div>
+      <h1>My Dashboard</h1>
+      <p class="text-dim">Welcome back, {{ (auth.user()?.fullName ?? '').split(' ')[0] }}. Here's your work overview.</p>
+    </div>
+  </div>
+
+  <!-- Stats strip -->
+  <div class="stats-strip">
+    <div class="stat-card">
+      <span>Active Projects</span>
+      <strong>{{ active().length }}</strong>
+    </div>
+    <div class="stat-card">
+      <span>Pending Invites</span>
+      <strong class="text-gold">{{ pending().length }}</strong>
+    </div>
+    <div class="stat-card">
+      <span>Pending Pay</span>
+      <strong class="text-accent">{{ pendingPay() | currency:'INR' }}</strong>
+    </div>
+    <div class="stat-card">
+      <span>Total Earned</span>
+      <strong class="text-green">{{ totalEarnings() | currency:'INR' }}</strong>
+    </div>
+    <div class="stat-card">
+      <span>Pending Returns</span>
+      <strong class="text-red">{{ pendingReturns() }}</strong>
+    </div>
+  </div>
+
+  <div class="dash-grid">
+    <!-- Pending assignments -->
+    <div class="card" *ngIf="pending().length">
+      <h3 class="mb-16">🔔 Pending Invitations</h3>
+      <div class="assignment-list">
+        <div class="assignment-row pending-row" *ngFor="let a of pending()">
+          <div class="assign-info">
+            <strong>{{ a.projectName }}</strong>
+            <span class="text-dim">{{ a.businessName }}</span>
+            <span class="text-faint" style="font-size:12px;">
+              {{ a.workDates.length }} day{{ a.workDates.length !== 1 ? 's' : '' }} ·
+              {{ a.workDates[0] | date:'mediumDate' }}
+              · Fee: {{ a.fee | currency:'INR' }}
+            </span>
+            <span class="text-faint" style="font-size:12px;" *ngIf="a.notes">{{ a.notes }}</span>
+          </div>
+          <div class="assign-actions">
+            <button class="btn btn-primary btn-sm" (click)="respond(a, 'accept')">Accept</button>
+            <button class="btn btn-danger btn-sm" (click)="respond(a, 'reject')">Decline</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active projects -->
+    <div class="card">
+      <div class="flex-between mb-16">
+        <h3>Active Projects</h3>
+        <a routerLink="/assistant/assignments" class="btn btn-ghost btn-sm">View All</a>
+      </div>
+      <div *ngIf="!active().length" class="empty-small">No active projects yet.</div>
+      <div class="assignment-list" *ngIf="active().length">
+        <div class="assignment-row" *ngFor="let a of active()">
+          <div class="assign-info">
+            <strong>{{ a.projectName }}</strong>
+            <span class="text-dim">{{ a.businessName }}</span>
+            <span class="text-faint" style="font-size:12px;">
+              {{ a.workDates.length }} day{{ a.workDates.length !== 1 ? 's' : '' }}
+              · {{ a.fee | currency:'INR' }}
+              · <span [class]="a.isPaid ? 'text-green' : 'text-gold'">{{ a.isPaid ? 'Paid' : 'Unpaid' }}</span>
+            </span>
+          </div>
+          <span class="badge badge-paid">Active</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upcoming work dates -->
+    <div class="card" *ngIf="upcomingDates().length">
+      <h3 class="mb-16">📅 Upcoming Work Dates</h3>
+      <div class="date-list">
+        <div class="date-row" *ngFor="let d of upcomingDates()">
+          <div class="date-badge">
+            <span>{{ d.date | date:'MMM' }}</span>
+            <strong>{{ d.date | date:'d' }}</strong>
+          </div>
+          <div>
+            <strong>{{ d.project }}</strong>
+            <span class="text-dim" style="font-size:12px;display:block;">{{ d.business }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent return requests -->
+    <div class="card" *ngIf="returnRequests().length">
+      <div class="flex-between mb-16">
+        <h3>Return Requests</h3>
+        <a routerLink="/assistant/returns" class="btn btn-ghost btn-sm">View All</a>
+      </div>
+      <div class="return-list">
+        <div class="return-row" *ngFor="let r of returnRequests().slice(0,4)">
+          <div class="assign-info">
+            <strong>{{ r.itemName }}</strong>
+            <span class="text-dim">{{ r.brandName }} · {{ r.projectName }}</span>
+            <span class="text-faint" style="font-size:12px;">{{ r.createdAt | date:'mediumDate' }}</span>
+          </div>
+          <span class="badge"
+            [ngClass]="r.status === 'Approved' ? 'badge-paid' : r.status === 'Rejected' ? 'badge-overdue' : 'badge-pending'">
+            {{ r.status }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

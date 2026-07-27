@@ -1,0 +1,124 @@
+<div class="fade-in" *ngIf="!loading(); else skelBlock">
+  <div class="page-header">
+    <div>
+      <a routerLink="/app/projects" class="back-link">← Projects</a>
+      <h1>{{ profit()?.projectName }}</h1>
+      <p class="text-dim">{{ profit()?.clientName }} · Profit & Loss Analysis</p>
+    </div>
+    <div class="flex gap-8" *ngIf="profit()">
+      <a [routerLink]="['/app/invoices/new']" [queryParams]="{projectId: profit().projectId}" class="btn btn-primary btn-sm">+ Invoice</a>
+      <a [routerLink]="['/app/bills']" [queryParams]="{projectId: profit().projectId}" class="btn btn-ghost btn-sm">+ Bill</a>
+    </div>
+  </div>
+
+  <ng-container *ngIf="profit() as p">
+    <div class="pnl-strip">
+      <div class="pnl-card">
+        <span class="pnl-label">Total Invoiced</span>
+        <strong class="pnl-value text-green">{{ p.revenue.totalInvoiced | currency:'INR':'symbol':'1.0-0' }}</strong>
+        <span class="pnl-sub">{{ p.revenue.invoiceCount }} invoice{{ p.revenue.invoiceCount !== 1 ? 's' : '' }}</span>
+      </div>
+      <div class="pnl-card">
+        <span class="pnl-label">Total Costs</span>
+        <strong class="pnl-value text-red">{{ p.costs.total | currency:'INR':'symbol':'1.0-0' }}</strong>
+        <span class="pnl-sub">Bills + Fees + Expenses</span>
+      </div>
+      <div class="pnl-card">
+        <span class="pnl-label">Gross Profit</span>
+        <strong class="pnl-value" [ngClass]="marginColor">{{ p.profit.grossProfit | currency:'INR':'symbol':'1.0-0' }}</strong>
+        <span class="pnl-sub" [ngClass]="marginColor">{{ p.profit.margin }}% margin</span>
+      </div>
+      <div class="pnl-card">
+        <span class="pnl-label">Collected</span>
+        <strong class="pnl-value">{{ p.revenue.totalCollected | currency:'INR':'symbol':'1.0-0' }}</strong>
+        <span class="pnl-sub text-gold" *ngIf="p.revenue.totalOutstanding > 0">₹{{ p.revenue.totalOutstanding | number:'1.0-0' }} outstanding</span>
+        <span class="pnl-sub text-green" *ngIf="p.revenue.totalOutstanding === 0">Fully collected</span>
+      </div>
+      <div class="pnl-card" *ngIf="p.budget">
+        <span class="pnl-label">Budget</span>
+        <strong class="pnl-value">{{ p.budget | currency:'INR':'symbol':'1.0-0' }}</strong>
+        <span class="pnl-sub">{{ ((p.costs.total / p.budget) * 100) | number:'1.0-0' }}% used</span>
+      </div>
+    </div>
+
+    <div class="card insights-card">
+      <h3 class="mb-14">💡 Insights & Suggestions</h3>
+      <div class="insights-list">
+        <div class="insight-row" [ngClass]="insightClass(ins.type)" *ngFor="let ins of p.insights">
+          <span class="ins-icon">{{ ins.icon }}</span>
+          <span>{{ ins.message }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-grid">
+      <div class="card">
+        <h3 class="mb-16">Cost Breakdown</h3>
+        <div class="breakdown-list">
+          <div class="breakdown-row">
+            <span>🧾 Bill Costs (net)</span>
+            <strong>{{ p.costs.billCost | currency:'INR':'symbol':'1.0-0' }}</strong>
+          </div>
+          <div class="breakdown-row">
+            <span>👥 Assistant Fees</span>
+            <strong>{{ p.costs.assistantFees | currency:'INR':'symbol':'1.0-0' }}</strong>
+          </div>
+          <div class="breakdown-row">
+            <span>💸 Personal Expenses</span>
+            <strong>{{ p.costs.personalExpenses | currency:'INR':'symbol':'1.0-0' }}</strong>
+          </div>
+          <div class="breakdown-row total-row">
+            <span><strong>Total Costs</strong></span>
+            <strong class="text-red">{{ p.costs.total | currency:'INR':'symbol':'1.0-0' }}</strong>
+          </div>
+        </div>
+        <div class="sub-section" *ngIf="p.costs.byBrand?.length">
+          <h4>By Brand</h4>
+          <div class="breakdown-row" *ngFor="let b of p.costs.byBrand">
+            <span class="text-dim">{{ b.brand }}</span>
+            <span class="mono">{{ b.total | currency:'INR':'symbol':'1.0-0' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="mb-16">Revenue Detail</h3>
+        <div class="breakdown-list">
+          <div class="breakdown-row">
+            <span>Total Invoiced</span>
+            <strong class="text-green">{{ p.revenue.totalInvoiced | currency:'INR':'symbol':'1.0-0' }}</strong>
+          </div>
+          <div class="breakdown-row">
+            <span>Collected</span>
+            <strong>{{ p.revenue.totalCollected | currency:'INR':'symbol':'1.0-0' }}</strong>
+          </div>
+          <div class="breakdown-row" *ngIf="p.revenue.totalOutstanding > 0">
+            <span>Outstanding</span>
+            <strong class="text-gold">{{ p.revenue.totalOutstanding | currency:'INR':'symbol':'1.0-0' }}</strong>
+          </div>
+        </div>
+        <div class="margin-bar-wrap mt-20">
+          <div class="margin-bar-label">
+            <span>Profit Margin</span>
+            <strong [ngClass]="marginColor">{{ p.profit.margin }}%</strong>
+          </div>
+          <div class="margin-bar-track">
+            <div class="margin-bar-fill" [ngClass]="marginColor"
+              [style.width.%]="p.profit.margin < 0 ? 0 : p.profit.margin > 100 ? 100 : p.profit.margin">
+            </div>
+          </div>
+          <div class="margin-legend">
+            <span class="text-red">Loss</span>
+            <span class="text-gold">Low (20%)</span>
+            <span class="text-green">Good (50%+)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #skelBlock>
+  <div class="skeleton" style="height:80px;width:100%;margin-bottom:16px;border-radius:12px;"></div>
+  <div class="skeleton" style="height:200px;width:100%;margin-bottom:16px;border-radius:12px;"></div>
+</ng-template>

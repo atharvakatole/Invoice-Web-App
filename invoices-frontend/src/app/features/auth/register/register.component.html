@@ -1,0 +1,116 @@
+<div class="auth-card fade-in">
+
+  <!-- ── STEP 1: Account details ── -->
+  <ng-container *ngIf="step() === 'details'">
+    <h2>Create your workspace</h2>
+    <p class="text-dim">Set up your account and business profile to start invoicing in minutes.</p>
+
+    <form [formGroup]="form" (ngSubmit)="sendOtpAndNext()" class="mt-24">
+      <div class="field-row">
+        <div class="field">
+          <label>Full Name</label>
+          <input formControlName="fullName" placeholder="Aishwarya Gupta" />
+          <span class="error" *ngIf="form.get('fullName')?.touched && form.get('fullName')?.invalid">Required</span>
+        </div>
+        <div class="field">
+          <label>Username</label>
+          <input formControlName="username" placeholder="aishwarya" />
+          <span class="error" *ngIf="form.get('username')?.touched && form.get('username')?.invalid">Required</span>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Email</label>
+          <input type="email" formControlName="email" placeholder="you@business.com" autocomplete="email" />
+          <span class="error" *ngIf="form.get('email')?.touched && form.get('email')?.invalid">Enter a valid email</span>
+        </div>
+        <div class="field">
+          <label>Phone (optional)</label>
+          <input formControlName="phoneNumber" placeholder="+91 98765 43210" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Password</label>
+        <div class="password-wrap">
+          <input [type]="showPassword() ? 'text' : 'password'" formControlName="password" placeholder="••••••••" autocomplete="new-password" />
+          <button type="button" class="toggle-pass" (click)="showPassword.set(!showPassword())">{{ showPassword() ? 'Hide' : 'Show' }}</button>
+        </div>
+        <span class="error" *ngIf="form.get('password')?.touched && form.get('password')?.invalid">Minimum 8 characters</span>
+      </div>
+
+      <hr class="divider" />
+
+      <div class="field-row">
+        <div class="field">
+          <label>Business Name</label>
+          <input formControlName="businessName" placeholder="Acme Studio" />
+          <span class="error" *ngIf="form.get('businessName')?.touched && form.get('businessName')?.invalid">Required</span>
+        </div>
+        <div class="field">
+          <label>Business Email</label>
+          <input type="email" formControlName="businessEmail" placeholder="billing@acmestudio.com" />
+          <span class="error" *ngIf="form.get('businessEmail')?.touched && form.get('businessEmail')?.invalid">Enter a valid email</span>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block" [disabled]="otpSending()">
+        {{ otpSending() ? 'Sending OTP...' : 'Continue — Verify Email' }}
+      </button>
+    </form>
+
+    <app-social-login></app-social-login>
+    <p class="switch-link">Already have an account? <a routerLink="/login">Sign in</a></p>
+  </ng-container>
+
+  <!-- ── STEP 2: OTP verification ── -->
+  <ng-container *ngIf="step() === 'otp'">
+    <div class="otp-header">
+      <div class="otp-icon">📧</div>
+      <h2>Check your email</h2>
+      <p class="text-dim">We sent a 6-digit code to <strong>{{ form.value.email }}</strong>. It expires in 10 minutes.</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="mt-24">
+      <div class="field">
+        <label>Enter OTP</label>
+        <input
+          formControlName="otpCode"
+          placeholder="_ _ _ _ _ _"
+          class="otp-input"
+          maxlength="6"
+          inputmode="numeric"
+          autocomplete="one-time-code" />
+        <span class="error" *ngIf="form.get('otpCode')?.touched && form.get('otpCode')?.invalid">
+          Enter the 6-digit code
+        </span>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block" [disabled]="loading()">
+        {{ loading() ? 'Verifying...' : 'Verify & Create Account' }}
+      </button>
+    </form>
+
+    <!-- Resend section -->
+    <div class="resend-row">
+      <ng-container *ngIf="resendCountdown() > 0">
+        <span class="text-faint resend-timer">
+          Resend OTP in <strong class="text-accent">{{ resendCountdown() }}s</strong>
+        </span>
+      </ng-container>
+      <button
+        *ngIf="resendCountdown() === 0"
+        type="button"
+        class="btn btn-ghost btn-sm"
+        [disabled]="otpSending()"
+        (click)="resendOtp()">
+        {{ otpSending() ? 'Sending...' : 'Resend OTP' }}
+      </button>
+    </div>
+
+    <button type="button" class="btn btn-ghost btn-block mt-8" (click)="backToDetails()">
+      ← Change email / details
+    </button>
+  </ng-container>
+</div>

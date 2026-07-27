@@ -1,0 +1,141 @@
+<div class="fade-in">
+  <div class="page-header">
+    <div><h1>Bills</h1><p class="text-dim">Bills from projects you're assigned to.</p></div>
+    <button class="btn btn-primary" (click)="showForm.set(!showForm())">+ Add Bill</button>
+  </div>
+
+  <!-- Add bill form -->
+  <div class="card mb-20" *ngIf="showForm()">
+    <h3 class="mb-16">Add New Bill</h3>
+    <div class="field">
+      <label>Project (from your assignments)</label>
+      <select [ngModel]="selectedAssignmentId()" (ngModelChange)="onProjectChange($event)">
+        <option value="">Select a project</option>
+        <option *ngFor="let a of activeAssignments()" [value]="a.id">{{ a.projectName }} — {{ a.businessName }}</option>
+      </select>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Brand Name</label>
+        <input type="text" [ngModel]="form().brandName" (ngModelChange)="setForm('brandName', $event)" placeholder="e.g. H&M" />
+      </div>
+      <div class="field">
+        <label>Bill Date</label>
+        <input type="date" [ngModel]="form().billDate" (ngModelChange)="setForm('billDate', $event)" />
+      </div>
+    </div>
+    <div class="field">
+      <label>Paid With</label>
+      <select [ngModel]="form().paidWith" (ngModelChange)="setForm('paidWith', $event)">
+        <option>Cash</option><option>Card</option><option>UPI</option><option>Bank Transfer</option>
+      </select>
+    </div>
+
+    <div class="items-section">
+      <div class="items-header">
+        <label>Items</label>
+        <button type="button" class="btn btn-ghost btn-sm" (click)="addItem()">+ Add Item</button>
+      </div>
+      <div class="item-row" *ngFor="let item of items(); let i = index">
+        <input type="text" [ngModel]="item.itemName" (ngModelChange)="setItem(i,'itemName',$event)" placeholder="Item name" style="flex:2" />
+        <input type="number" [ngModel]="item.quantity" (ngModelChange)="setItem(i,'quantity',+$event)" placeholder="Qty" style="flex:0.5;min-width:60px" min="1" />
+        <input type="number" [ngModel]="item.pricePerItem" (ngModelChange)="setItem(i,'pricePerItem',+$event)" placeholder="Price" style="flex:1;min-width:80px" min="0" step="0.01" />
+        <label class="checkbox-row" style="flex:1;white-space:nowrap;">
+          <input type="checkbox" [ngModel]="item.isRefundable" (ngModelChange)="setItem(i,'isRefundable',$event)" /> Refundable
+        </label>
+        <input *ngIf="item.isRefundable" type="date" [ngModel]="item.returnByDate" (ngModelChange)="setItem(i,'returnByDate',$event)" placeholder="Return by" style="flex:1" />
+        <button type="button" class="btn btn-danger btn-sm" (click)="removeItem(i)" *ngIf="items().length > 1">✕</button>
+      </div>
+    </div>
+
+    <div class="field mt-12">
+      <label>Notes</label>
+      <textarea rows="2" [ngModel]="form().notes" (ngModelChange)="setForm('notes', $event)" placeholder="Additional notes"></textarea>
+    </div>
+    <div class="flex gap-12 mt-16">
+      <button class="btn btn-ghost btn-block" (click)="showForm.set(false)">Cancel</button>
+      <button class="btn btn-primary btn-block" [disabled]="saving()" (click)="saveBill()">
+        {{ saving() ? 'Saving...' : 'Add Bill' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Bills list -->
+  <div *ngIf="loading()" class="skeleton" style="height:300px;width:100%;"></div>
+
+  <div *ngIf="!loading()">
+    <div *ngIf="!bills().length" class="card">
+      <div class="empty">
+        <div class="empty-icon">🧾</div>
+        <h3>No bills yet</h3>
+        <p>Bills from your assigned projects will appear here.</p>
+      </div>
+    </div>
+
+    <div class="bill-card card" *ngFor="let bill of bills()">
+      <div class="bill-header">
+        <div>
+          <strong>{{ bill.brandName }}</strong>
+          <span class="text-dim ml-8">{{ bill.projectName }}</span>
+        </div>
+        <span class="text-faint">{{ bill.billDate | date:'mediumDate' }}</span>
+      </div>
+      <div class="bill-items">
+        <div class="bill-item-row" *ngFor="let item of bill.items">
+          <div class="item-info">
+            <span>{{ item.itemName }}</span>
+            <span class="text-faint" style="font-size:12px;">
+              Qty: {{ item.quantity }} · {{ item.pricePerItem | currency:'INR' }}/ea
+              <span *ngIf="item.isRefundable"> · Refundable</span>
+              <span *ngIf="item.returnByDate"> · Return by {{ item.returnByDate | date:'mediumDate' }}</span>
+            </span>
+          </div>
+          <div class="item-actions">
+            <span class="mono">{{ item.totalCost | currency:'INR' }}</span>
+            <button
+              *ngIf="item.isRefundable && item.quantityPending > 0"
+              class="btn btn-ghost btn-sm"
+              (click)="openReturn(bill, item)">
+              🔄 Return ({{ item.quantityPending }})
+            </button>
+            <span *ngIf="item.quantityReturned > 0" class="badge badge-paid" style="font-size:11px;">
+              {{ item.quantityReturned }} returned
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="bill-footer">
+        <span class="text-dim">{{ bill.paidWith }}</span>
+        <strong>Total: {{ bill.totalCost | currency:'INR' }}</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Return modal -->
+<div class="modal-backdrop" *ngIf="returnModal()" (click)="returnModal.set(null)">
+  <div class="modal card" (click)="$event.stopPropagation()">
+    <h3>Request Return</h3>
+    <p class="text-dim">
+      Submit a return request for <strong>{{ returnModal()?.item?.itemName }}</strong>
+      from <strong>{{ returnModal()?.bill?.brandName }}</strong>.
+      Your manager will verify and approve it.
+    </p>
+    <div class="field mt-16">
+      <label>Quantity to Return (max {{ returnModal()?.item?.quantityPending }})</label>
+      <input type="number" [ngModel]="returnQty()" (ngModelChange)="returnQty.set(+$event)"
+        min="1" [max]="returnModal()?.item?.quantityPending" />
+    </div>
+    <div class="field">
+      <label>Notes (optional)</label>
+      <textarea rows="2" [ngModel]="returnNotes()" (ngModelChange)="returnNotes.set($event)"
+        placeholder="e.g. Items in original condition, receipt attached"></textarea>
+    </div>
+    <div class="flex gap-12 mt-16">
+      <button class="btn btn-ghost btn-block" (click)="returnModal.set(null)">Cancel</button>
+      <button class="btn btn-primary btn-block" [disabled]="submittingReturn()" (click)="submitReturn()">
+        {{ submittingReturn() ? 'Submitting...' : 'Submit Return Request' }}
+      </button>
+    </div>
+  </div>
+</div>

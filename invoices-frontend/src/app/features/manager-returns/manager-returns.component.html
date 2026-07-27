@@ -1,0 +1,79 @@
+<div class="fade-in">
+  <div class="page-header">
+    <div>
+      <h1>Return Approvals</h1>
+      <p class="text-dim">Review and approve return requests submitted by your assistants.</p>
+    </div>
+    <select class="filter-select" [ngModel]="filterStatus()" (ngModelChange)="filterStatus.set($event); load()">
+      <option value="Pending">Pending</option>
+      <option value="Approved">Approved</option>
+      <option value="Rejected">Rejected</option>
+      <option value="All">All</option>
+    </select>
+  </div>
+
+  <div *ngIf="loading()" class="skeleton" style="height:300px;width:100%;"></div>
+
+  <div *ngIf="!loading()">
+    <div class="card" *ngIf="!requests().length">
+      <div class="empty">
+        <div class="empty-icon">✅</div>
+        <h3>No return requests</h3>
+        <p>When assistants submit return requests, they'll appear here for your approval.</p>
+      </div>
+    </div>
+
+    <div class="return-card card" *ngFor="let r of requests()">
+      <div class="rc-header">
+        <div class="rc-info">
+          <div class="rc-title">
+            <strong>{{ r.itemName }}</strong>
+            <span class="badge ml-8"
+              [ngClass]="r.status === 'Approved' ? 'badge-paid' : r.status === 'Rejected' ? 'badge-overdue' : 'badge-pending'">
+              {{ r.status }}
+            </span>
+          </div>
+          <div class="rc-meta">
+            <span>🏷️ {{ r.brandName }}</span>
+            <span>📁 {{ r.projectName }}</span>
+            <span>👤 {{ r.assistantName }}</span>
+            <span>Qty: <strong>{{ r.quantityToReturn }}</strong></span>
+            <span>Refund: <strong class="text-accent">{{ r.estimatedRefund | currency:'INR' }}</strong></span>
+          </div>
+          <div class="rc-meta" style="margin-top:4px;">
+            <span>Submitted: {{ r.createdAt | date:'mediumDate' }}</span>
+            <span *ngIf="r.resolvedAt">Resolved: {{ r.resolvedAt | date:'mediumDate' }}</span>
+          </div>
+          <div class="rc-notes" *ngIf="r.notes">
+            <span class="note-label">Assistant notes:</span> {{ r.notes }}
+          </div>
+          <div class="rc-notes manager-note" *ngIf="r.managerNotes">
+            <span class="note-label">Manager notes:</span> {{ r.managerNotes }}
+          </div>
+        </div>
+        <div class="rc-actions" *ngIf="r.status === 'Pending'">
+          <button class="btn btn-primary btn-sm" [disabled]="resolving() === r.id" (click)="approve(r)">
+            {{ resolving() === r.id ? '...' : '✓ Approve' }}
+          </button>
+          <button class="btn btn-danger btn-sm" (click)="openReject(r)">✗ Reject</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Reject modal -->
+<div class="modal-backdrop" *ngIf="rejectModal()" (click)="rejectModal.set(null)">
+  <div class="modal card" (click)="$event.stopPropagation()">
+    <h3>Reject Return Request</h3>
+    <p class="text-dim">Rejecting return of <strong>{{ rejectModal()?.itemName }}</strong> by {{ rejectModal()?.assistantName }}.</p>
+    <div class="field mt-16">
+      <label>Reason (optional — assistant will see this)</label>
+      <textarea rows="3" [ngModel]="managerNotes()" (ngModelChange)="managerNotes.set($event)" placeholder="e.g. Please bring items to the office first..."></textarea>
+    </div>
+    <div class="flex gap-12 mt-16">
+      <button class="btn btn-ghost btn-block" (click)="rejectModal.set(null)">Cancel</button>
+      <button class="btn btn-danger btn-block" (click)="confirmReject()">Reject Request</button>
+    </div>
+  </div>
+</div>

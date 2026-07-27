@@ -1,0 +1,83 @@
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">IN</div>
+      <div>
+        <div class="brand-name">Invoicely</div>
+        <div class="brand-sub">ASSISTANT</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a routerLink="/assistant/dashboard" routerLinkActive="active">
+        <span class="nav-icon">📊</span> Dashboard
+      </a>
+      <a routerLink="/assistant/assignments" routerLinkActive="active">
+        <span class="nav-icon">📋</span> Assignments
+      </a>
+      <a routerLink="/assistant/bills" routerLinkActive="active">
+        <span class="nav-icon">🧾</span> Bills
+      </a>
+      <a routerLink="/assistant/returns" routerLinkActive="active">
+        <span class="nav-icon">🔄</span> Return Requests
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="switch-mode-btn" (click)="switchToManager()">
+        <span>⇄</span> Switch to Manager
+      </button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-title">
+        <div class="topbar-name-row">
+          <h2 class="topbar-name">{{ auth.user()?.fullName }}</h2>
+          <span class="topbar-role-badge">🎨 Assistant Mode</span>
+        </div>
+        <p class="topbar-email">{{ auth.user()?.email }}</p>
+      </div>
+      <div class="topbar-actions">
+        <div class="theme-picker-app">
+          <button class="theme-toggle-app" (click)="themeMenuOpen.set(!themeMenuOpen())" title="Change theme">
+            <span class="theme-current-dot"></span>
+          </button>
+          <div class="theme-menu-app" *ngIf="themeMenuOpen()">
+            <p class="theme-menu-label">Theme</p>
+            <button *ngFor="let t of theme.themes" class="theme-option" [class.active]="theme.activeId() === t.id" (click)="pickTheme(t.id)">
+              <span class="theme-swatch" [style.background]="t.swatch"></span>
+              {{ t.name }}
+              <span class="check" *ngIf="theme.activeId() === t.id">✓</span>
+            </button>
+          </div>
+        </div>
+        <div class="profile-menu-wrap">
+          <button class="profile-btn avatar" (click)="profileMenuOpen.set(!profileMenuOpen())">
+            {{ initials() }}
+          </button>
+          <div class="profile-menu" *ngIf="profileMenuOpen()">
+            <div class="profile-menu-user">
+              <strong>{{ auth.user()?.fullName }}</strong>
+              <span class="text-faint">{{ auth.user()?.email }}</span>
+            </div>
+            <div class="profile-menu-divider"></div>
+            <a routerLink="/assistant/change-password" class="profile-menu-item" (click)="profileMenuOpen.set(false)">
+              <span class="pm-icon">🔑</span> Change Password
+            </a>
+            <button class="profile-menu-item" (click)="switchToManager(); profileMenuOpen.set(false)">
+              <span class="pm-icon">⇄</span> Switch to Manager
+            </button>
+            <button class="profile-menu-item danger" (click)="logout()">
+              <span class="pm-icon">🚪</span> Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main class="content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

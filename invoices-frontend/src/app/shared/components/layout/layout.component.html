@@ -1,0 +1,129 @@
+<div class="shell">
+  <aside class="sidebar" [class.open]="sidebarOpen()">
+    <div class="brand">
+      <div class="brand-mark">IN</div>
+      <div class="brand-text">
+        <strong>Invoicely</strong>
+        <span>Billing & Invoices</span>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a routerLink="/app/dashboard" routerLinkActive="active" (click)="closeSidebar()">
+        <span class="ico">◧</span> Dashboard
+      </a>
+      <a routerLink="/app/invoices" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeSidebar()">
+        <span class="ico">▤</span> Invoices
+      </a>
+      <a routerLink="/app/clients" routerLinkActive="active" (click)="closeSidebar()">
+        <span class="ico">👥</span> Clients
+      </a>
+      <a routerLink="/app/projects" routerLinkActive="active" (click)="closeSidebar()">
+        <span class="ico">📋</span> Projects
+      </a>
+      <a routerLink="/app/invoices/new" routerLinkActive="active" (click)="closeSidebar()">
+        <span class="ico">＋</span> New Invoice
+      </a>
+      <a routerLink="/app/calendar" routerLinkActive="active" (click)="closeSidebar()">
+        <span class="ico">📅</span> Schedule
+      </a>
+      <a routerLink="/app/assistants" routerLinkActive="active" (click)="closeSidebar()">
+        <span class="ico">🧑‍🤝‍🧑</span> Assistants
+      </a>
+      <a routerLink="/app/bills" routerLinkActive="active" (click)="closeSidebar()">
+        <span class="ico">🧾</span> Bills
+      </a>
+      <a routerLink="/app/reports" routerLinkActive="active" (click)="closeSidebar()">
+        <span class="ico">◔</span> Reports & GST
+      </a>
+      <a routerLink="/app/branding" routerLinkActive="active" (click)="closeSidebar()">
+        <span class="ico">🎨</span> Invoice Branding
+      </a>
+      <a routerLink="/app/billing" routerLinkActive="active" (click)="closeSidebar()">
+        <span class="ico">◆</span> Billing & Plan
+      </a>
+      <a *ngIf="auth.user()?.role === UserRole.SuperAdmin" routerLink="/app/admin" routerLinkActive="active" (click)="closeSidebar()">
+        <span class="ico">⚙</span> Admin
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="plan-card" *ngIf="!isPremium()">
+        <p class="plan-label">Current Plan</p>
+        <p class="plan-name">{{ planName() || 'Free' }}</p>
+        <a routerLink="/app/billing" class="btn btn-gold btn-sm btn-block" (click)="closeSidebar()">Upgrade to Premium</a>
+      </div>
+      <div class="plan-card premium-card" *ngIf="isPremium()">
+        <p class="plan-label">Current Plan</p>
+        <p class="plan-name">⭐ Premium</p>
+        <a routerLink="/app/billing" class="btn btn-ghost btn-sm btn-block" (click)="closeSidebar()">Manage</a>
+      </div>
+    </div>
+  </aside>
+
+  <div class="backdrop" *ngIf="sidebarOpen()" (click)="closeSidebar()"></div>
+
+  <div class="main">
+    <header class="topbar">
+      <button class="hamburger" (click)="toggleSidebar()" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="topbar-title">
+        <div class="topbar-name-row">
+          <h2>Welcome back<span class="text-gold" *ngIf="auth.user()?.fullName">, {{ auth.user()?.fullName }}</span></h2>
+          <span class="topbar-mode-badge" *ngIf="auth.isAssistant()">🏢 Manager Mode</span>
+        </div>
+        <p class="text-faint mono">{{ auth.user()?.email }}</p>
+      </div>
+      <div class="topbar-actions">
+        <div class="theme-picker-app">
+          <button class="theme-toggle-app" (click)="themeMenuOpen.set(!themeMenuOpen())" aria-label="Change theme" title="Change theme">
+            <span class="theme-current-dot"></span>
+          </button>
+          <div class="theme-menu-app" *ngIf="themeMenuOpen()">
+            <p class="theme-menu-label">Theme</p>
+            <button *ngFor="let t of theme.themes" class="theme-option" [class.active]="theme.activeId() === t.id" (click)="pickTheme(t.id)">
+              <span class="theme-swatch" [style.background]="t.swatch"></span>
+              {{ t.name }}
+              <span class="check" *ngIf="theme.activeId() === t.id">✓</span>
+            </button>
+          </div>
+        </div>
+        <a routerLink="/app/return-approvals" routerLinkActive="active">
+          <span>🔄</span> Return Approvals
+        </a>
+        <a routerLink="/app/notifications" class="notif-bell" title="Notifications">
+          🔔
+          <span class="notif-badge" *ngIf="notifService.unreadCount() > 0">
+            {{ notifService.unreadCount() > 9 ? '9+' : notifService.unreadCount() }}
+          </span>
+        </a>
+        <div class="profile-menu-wrap">
+          <button class="avatar profile-btn" (click)="profileMenuOpen.set(!profileMenuOpen())" aria-label="Profile menu">
+            {{ initials() }}
+          </button>
+          <div class="profile-menu" *ngIf="profileMenuOpen()">
+            <div class="profile-menu-user">
+              <strong>{{ auth.user()?.fullName }}</strong>
+              <span class="text-faint">{{ auth.user()?.email }}</span>
+            </div>
+            <div class="profile-menu-divider"></div>
+            <a routerLink="/app/change-password" class="profile-menu-item" (click)="profileMenuOpen.set(false)">
+              <span class="pm-icon">🔑</span> Change Password
+            </a>
+            <button class="profile-menu-item" *ngIf="auth.isAssistant()" (click)="switchMode(); profileMenuOpen.set(false)">
+              <span class="pm-icon">⇄</span> Switch to Assistant
+            </button>
+            <button class="profile-menu-item danger" (click)="logout()">
+              <span class="pm-icon">🚪</span> Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

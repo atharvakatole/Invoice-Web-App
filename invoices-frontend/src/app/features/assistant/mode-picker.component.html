@@ -1,0 +1,26 @@
+<div class="mode-picker-bg">
+  <div class="mode-picker-wrap fade-in" *ngIf="!loading()">
+    <div class="mp-header">
+      <div class="mp-logo">IN</div>
+      <h1>Welcome back, {{ (auth.user()?.fullName ?? '').split(' ')[0] }}</h1>
+      <p>You have access to two modes. How are you working today?</p>
+    </div>
+
+    <div class="mp-cards">
+      <button class="mp-card manager" (click)="goManager()">
+        <div class="mp-icon">🏢</div>
+        <h2>Manager Mode</h2>
+        <p>Manage invoices, clients, projects, assistants, and bills for your business.</p>
+        <span class="mp-cta">Open Dashboard →</span>
+      </button>
+
+      <button class="mp-card assistant" (click)="goAssistant()">
+        <div class="mp-icon">🎨</div>
+        <h2>Assistant Mode</h2>
+        <p>View your assigned projects, manage bills, and submit return requests.</p>
+        <span class="mp-badge" *ngIf="pendingCount() > 0">{{ pendingCount() }} pending</span>
+        <span class="mp-cta">Open Assistant Portal →</span>
+      </button>
+    </div>
+  </div>
+</div>

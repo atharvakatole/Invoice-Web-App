@@ -1,0 +1,74 @@
+<div class="fade-in">
+  <div class="page-header">
+    <div><h1>My Assignments</h1><p class="text-dim">All project assignments across your businesses.</p></div>
+    <div class="flex gap-8">
+      <select class="filter-select" [ngModel]="filterStatus()" (ngModelChange)="filterStatus.set($event)">
+        <option value="all">All</option>
+        <option value="Pending">Pending</option>
+        <option value="Accepted">Accepted</option>
+        <option value="Rejected">Rejected</option>
+        <option value="Completed">Completed</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="loading()" class="skeleton" style="height:300px;width:100%;"></div>
+
+  <div class="card" *ngIf="!loading()">
+    <div *ngIf="!filtered().length" class="empty">
+      <div class="empty-icon">📋</div>
+      <h3>No assignments</h3>
+      <p>Your manager will send you project assignments here.</p>
+    </div>
+    <div class="assignment-cards" *ngIf="filtered().length">
+      <div class="assign-card" *ngFor="let a of filtered()">
+        <div class="assign-card-header">
+          <div>
+            <h3>{{ a.projectName }}</h3>
+            <span class="text-dim">{{ a.businessName }}</span>
+          </div>
+          <span class="badge" [ngClass]="statusClass(a.status)">{{ a.status }}</span>
+        </div>
+        <div class="assign-card-body">
+          <div class="info-row">
+            <span class="info-label">Work Dates</span>
+            <div class="date-chips">
+              <span class="chip" *ngFor="let d of a.workDates">{{ d | date:'MMM d, y' }}</span>
+            </div>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Fee</span>
+            <span class="mono">{{ a.fee | currency:'INR' }}</span>
+            <span class="badge ml-8" [ngClass]="a.isPaid ? 'badge-paid' : 'badge-pending'">
+              {{ a.isPaid ? 'Paid' : 'Unpaid' }}
+            </span>
+          </div>
+          <div class="info-row" *ngIf="a.notes">
+            <span class="info-label">Notes</span>
+            <span class="text-dim">{{ a.notes }}</span>
+          </div>
+        </div>
+        <div class="assign-card-actions" *ngIf="a.status === 'Pending'">
+          <button class="btn btn-primary btn-sm" (click)="accept(a)">✓ Accept</button>
+          <button class="btn btn-danger btn-sm" (click)="openReject(a)">✗ Decline</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Reject modal -->
+<div class="modal-backdrop" *ngIf="rejectModal()" (click)="rejectModal.set(null)">
+  <div class="modal card" (click)="$event.stopPropagation()">
+    <h3>Decline Assignment</h3>
+    <p class="text-dim">Declining "{{ rejectModal()?.projectName }}" — let your manager know why (optional).</p>
+    <div class="field mt-16">
+      <label>Reason (optional)</label>
+      <textarea rows="3" [ngModel]="rejectReason()" (ngModelChange)="rejectReason.set($event)" placeholder="e.g. Schedule conflict, prior commitment..."></textarea>
+    </div>
+    <div class="flex gap-12 mt-16">
+      <button class="btn btn-ghost btn-block" (click)="rejectModal.set(null)">Cancel</button>
+      <button class="btn btn-danger btn-block" (click)="confirmReject()">Decline Assignment</button>
+    </div>
+  </div>
+</div>

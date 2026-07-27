@@ -1,0 +1,164 @@
+<div class="fade-in">
+  <div class="page-header">
+    <div>
+      <h1>Personal Expenses</h1>
+      <p class="text-dim">Track your out-of-pocket business spending — travel, equipment, food, and more.</p>
+    </div>
+    <button class="btn btn-primary" (click)="openCreate()">+ Add Expense</button>
+  </div>
+
+  <!-- Summary strip -->
+  <div class="summary-strip" *ngIf="summary()">
+    <div class="sum-card">
+      <span>This Month</span>
+      <strong class="text-red">{{ summary()!.totalThisMonth | currency:'INR':'symbol':'1.0-0' }}</strong>
+    </div>
+    <div class="sum-card">
+      <span>Last Month</span>
+      <strong class="text-dim">{{ summary()!.totalLastMonth | currency:'INR':'symbol':'1.0-0' }}</strong>
+    </div>
+    <div class="sum-card">
+      <span>All Time</span>
+      <strong>{{ summary()!.totalAllTime | currency:'INR':'symbol':'1.0-0' }}</strong>
+    </div>
+    <div class="sum-card">
+      <span>Total Entries</span>
+      <strong>{{ summary()!.count }}</strong>
+    </div>
+    <div class="sum-card">
+      <span>Top Category</span>
+      <strong>{{ categoryIcon(summary()!.topCategory) }} {{ summary()!.topCategory }}</strong>
+    </div>
+  </div>
+
+  <div class="dash-grid">
+    <!-- Category breakdown -->
+    <div class="card" *ngIf="byCategory().length">
+      <h3 class="mb-16">By Category</h3>
+      <div class="cat-list">
+        <div class="cat-row" *ngFor="let cat of byCategory()">
+          <div class="cat-label">
+            <span class="cat-icon">{{ categoryIcon(cat.category) }}</span>
+            <span>{{ cat.category }}</span>
+            <span class="text-faint" style="font-size:12px;">{{ cat.count }} entries</span>
+          </div>
+          <strong class="mono">{{ cat.total | currency:'INR':'symbol':'1.0-0' }}</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="card">
+      <h3 class="mb-16">Filter</h3>
+      <div class="field">
+        <label>Category</label>
+        <select [ngModel]="filterCategory()" (ngModelChange)="filterCategory.set($event)">
+          <option value="All">All Categories</option>
+          <option *ngFor="let c of categories()" [value]="c">{{ categoryIcon(c) }} {{ c }}</option>
+        </select>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>From</label>
+          <input type="date" [ngModel]="filterFrom()" (ngModelChange)="filterFrom.set($event)" />
+        </div>
+        <div class="field">
+          <label>To</label>
+          <input type="date" [ngModel]="filterTo()" (ngModelChange)="filterTo.set($event)" />
+        </div>
+      </div>
+      <button class="btn btn-primary btn-block" (click)="loadExpenses()">Apply Filter</button>
+      <button class="btn btn-ghost btn-block mt-8" (click)="filterCategory.set('All'); filterFrom.set(''); filterTo.set(''); loadExpenses()">Clear</button>
+    </div>
+  </div>
+
+  <!-- Expenses list -->
+  <div class="card mt-20">
+    <div class="flex-between mb-16">
+      <h3>Expenses</h3>
+      <span class="text-dim" *ngIf="expenses().length">
+        Total: <strong class="text-red mono">{{ totalFiltered() | currency:'INR':'symbol':'1.0-0' }}</strong>
+      </span>
+    </div>
+
+    <div *ngIf="loading()" class="skeleton" style="height:240px;width:100%;"></div>
+
+    <div *ngIf="!loading()">
+      <div *ngIf="!expenses().length" class="empty">
+        <div class="empty-icon">💸</div>
+        <h3>No expenses yet</h3>
+        <p>Start tracking your personal business expenses.</p>
+        <button class="btn btn-primary btn-sm" (click)="openCreate()">+ Add First Expense</button>
+      </div>
+
+      <div class="expense-list" *ngIf="expenses().length">
+        <div class="expense-row" *ngFor="let e of expenses()">
+          <div class="exp-icon">{{ categoryIcon(e.category) }}</div>
+          <div class="exp-info">
+            <strong>{{ e.description }}</strong>
+            <span class="text-faint" style="font-size:12px;">
+              {{ e.category }} · {{ e.expenseDate | date:'mediumDate' }}
+              <span *ngIf="e.projectName" class="exp-project-tag">📁 {{ e.projectName }}</span>
+              <span *ngIf="e.notes"> · {{ e.notes }}</span>
+            </span>
+          </div>
+          <strong class="mono text-red exp-amount">{{ e.amount | currency:'INR' }}</strong>
+          <div class="exp-actions">
+            <button class="btn btn-ghost btn-sm" (click)="openEdit(e)">Edit</button>
+            <button class="btn btn-danger btn-sm" (click)="delete(e)">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add / Edit modal -->
+<div class="modal-backdrop" *ngIf="showForm()" (click)="showForm.set(false)">
+  <div class="modal card" (click)="$event.stopPropagation()">
+    <h3>{{ editingId() ? 'Edit Expense' : 'Add Expense' }}</h3>
+
+    <div class="field mt-16">
+      <label>Description</label>
+      <input type="text" [(ngModel)]="form.description" placeholder="e.g. Uber to shoot location" />
+    </div>
+
+    <div class="field">
+      <label>Tag to Project <span class="text-faint" style="font-size:12px;">(optional)</span></label>
+      <select [(ngModel)]="form.projectId" (ngModelChange)="onProjectChange($event)">
+        <option value="">— No project —</option>
+        <option *ngFor="let p of projects()" [value]="p.id">{{ p.name }}</option>
+      </select>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label>Category</label>
+        <select [(ngModel)]="form.category">
+          <option *ngFor="let c of categories()" [value]="c">{{ categoryIcon(c) }} {{ c }}</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Date</label>
+        <input type="date" [(ngModel)]="form.expenseDate" />
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Amount (₹)</label>
+      <input type="number" min="0" step="0.01" [(ngModel)]="form.amount" placeholder="0.00" />
+    </div>
+
+    <div class="field">
+      <label>Notes (optional)</label>
+      <input type="text" [(ngModel)]="form.notes" placeholder="Receipt ref, vendor, etc." />
+    </div>
+
+    <div class="flex gap-12 mt-16">
+      <button class="btn btn-ghost btn-block" (click)="showForm.set(false)">Cancel</button>
+      <button class="btn btn-primary btn-block" [disabled]="saving()" (click)="save()">
+        {{ saving() ? 'Saving...' : editingId() ? 'Update' : 'Add Expense' }}
+      </button>
+    </div>
+  </div>
+</div>

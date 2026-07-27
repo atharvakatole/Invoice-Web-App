@@ -1,0 +1,37 @@
+.page-header { margin-bottom: 20px; }
+.stats-strip {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 20px;
+}
+.stat-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md);
+  padding: 16px; display: flex; flex-direction: column; gap: 6px;
+}
+.stat-card span { font-size: 11px; text-transform: uppercase; letter-spacing: .07em; color: var(--text-faint); }
+.stat-card strong { font-size: 20px; font-family: var(--font-display); }
+.dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.assignment-list { display: flex; flex-direction: column; gap: 12px; }
+.assignment-row {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+  padding: 12px 0; border-bottom: 1px solid var(--border);
+}
+.assignment-row:last-child { border-bottom: none; }
+.pending-row { background: rgba(245,196,81,0.05); padding: 12px; border-radius: var(--radius-sm); border: 1px solid rgba(245,196,81,0.2); }
+.assign-info { display: flex; flex-direction: column; gap: 3px; flex: 1; }
+.assign-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.date-list { display: flex; flex-direction: column; gap: 12px; }
+.date-row { display: flex; align-items: center; gap: 14px; }
+.date-badge {
+  width: 44px; height: 44px; border-radius: var(--radius-sm);
+  background: var(--accent-tint); border: 1px solid var(--accent-tint-strong);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.date-badge span { font-size: 9px; text-transform: uppercase; color: var(--accent); }
+.date-badge strong { font-size: 16px; color: var(--accent); line-height: 1; }
+.return-list { display: flex; flex-direction: column; gap: 10px; }
+.return-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.empty-small { color: var(--text-faint); font-size: 14px; text-align: center; padding: 20px 0; }
+@media(max-width: 900px) {
+  .stats-strip { grid-template-columns: 1fr 1fr; }
+  .dash-grid { grid-template-columns: 1fr; }
+}
