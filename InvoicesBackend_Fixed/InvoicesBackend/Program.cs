@@ -81,7 +81,8 @@ builder.Services.AddCors(options =>
     // Falls back to the local dev server if nothing is configured.
     var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
     if (allowedOrigins == null || allowedOrigins.Length == 0)
-        allowedOrigins = new[] { "http://localhost:4200" };
+       { allowedOrigins = new[] { "http://localhost:4200" }; 
+       allowedOrigins = new[]{"https://invoice-web-j33e7j90m-project-1-2428.vercel.app/login"};};
 
     options.AddPolicy("AllowAngular",
         policy =>
