@@ -1,4 +1,5 @@
 {
-  "buildCommand": "npm install --legacy-peer-deps && ng build --configuration production",
-  "outputDirectory": "dist/invoices-frontend/browser"
+  "buildCommand": "npm install --legacy-peer-deps && npm run build",
+  "outputDirectory": "dist/invoices-frontend/browser",
+  "framework": "angular"
 }
