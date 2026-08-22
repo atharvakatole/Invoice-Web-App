@@ -69,11 +69,7 @@
         <span></span><span></span><span></span>
       </button>
       <div class="topbar-title">
-        <div class="topbar-name-row">
-          <h2>Welcome back<span class="text-gold" *ngIf="auth.user()?.fullName">, {{ auth.user()?.fullName }}</span></h2>
-          <span class="topbar-mode-badge" *ngIf="auth.isAssistant()">🏢 Manager Mode</span>
-        </div>
-        <p class="text-faint mono">{{ auth.user()?.email }}</p>
+        <h2 class="topbar-greeting">Welcome<span class="text-gold" *ngIf="auth.user()?.fullName">, {{ auth.user()?.fullName?.split(' ')[0] }}</span></h2>
       </div>
       <div class="topbar-actions">
         <div class="theme-picker-app">
@@ -89,8 +85,8 @@
             </button>
           </div>
         </div>
-        <a routerLink="/app/return-approvals" routerLinkActive="active">
-          <span>🔄</span> Return Approvals
+        <a routerLink="/app/return-approvals" routerLinkActive="active" class="topbar-icon-btn" title="Return Approvals">
+          🔄
         </a>
         <a routerLink="/app/notifications" class="notif-bell" title="Notifications">
           🔔

@@ -129,3 +129,15 @@
 .status-fill.badge-overdue { background: var(--red); }
 .status-fill.badge-cancelled { background: var(--text-faint); }
 .status-total { font-size: 11.5px; color: var(--text-dim); align-self: flex-end; }
+
+/* ---- Extra mobile fixes ---- */
+@media (max-width: 480px) {
+  .stat-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stat-card { padding: 14px; }
+  .stat-value { font-size: 18px; }
+  .stat-label { font-size: 10px; }
+  .hero-banner { padding: 20px 16px; }
+  .expense-dash-strip { flex-direction: column; }
+  .exp-stat { border-right: none; border-bottom: 1px solid var(--border); padding: 10px 0; }
+  .exp-stat:last-child { border-bottom: none; }
+}

@@ -30,7 +30,6 @@ export const routes: Routes = [
       { path: 'invoices/new', loadComponent: () => import('./features/invoices/invoice-create/invoice-create.component').then(m => m.InvoiceCreateComponent) },
       { path: 'clients', loadComponent: () => import('./features/clients/client-list/client-list.component').then(m => m.ClientListComponent) },
       { path: 'projects', loadComponent: () => import('./features/projects/projects.component').then(m => m.ProjectsComponent) },
-      { path: 'projects/:id', loadComponent: () => import('./features/projects/project-detail/project-detail.component').then(m => m.ProjectDetailComponent) },
       { path: 'clients/:id/ledger', loadComponent: () => import('./features/clients/client-ledger/client-ledger.component').then(m => m.ClientLedgerComponent) },
       { path: 'reports', loadComponent: () => import('./features/reports/reports.component').then(m => m.ReportsComponent) },
       { path: 'assistants', loadComponent: () => import('./features/assistants/assistants.component').then(m => m.AssistantsComponent) },

@@ -398,3 +398,17 @@ table.data-table tbody tr:last-child td { border-bottom: none; }
 
 /* Prevent layout shift from scrollbar */
 html { scrollbar-gutter: stable; }
+
+/* ── Global mobile polish ──────────────────────────────── */
+@media (max-width: 480px) {
+  .page-header { flex-direction: column; gap: 12px; }
+  .page-header h1 { font-size: 22px; }
+  .modal-backdrop .modal { margin: 12px; width: calc(100% - 24px); max-width: 100%; }
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .data-table { min-width: 560px; }
+  .card { padding: 16px; }
+  .btn { font-size: 13px; }
+  .pnl-strip { flex-direction: column; }
+  .pnl-card { border-right: none; border-bottom: 1px solid var(--border); }
+  .pnl-card:last-child { border-bottom: none; }
+}

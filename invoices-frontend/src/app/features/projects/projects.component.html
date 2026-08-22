@@ -54,7 +54,6 @@
       </div>
 
       <div class="project-links">
-        <a [routerLink]="['/app/projects', p.id]" class="btn btn-ghost btn-sm">📊 Profit</a>
         <a [routerLink]="['/app/invoices/new']" [queryParams]="{ projectId: p.id }" class="btn btn-ghost btn-sm">+ Invoice</a>
         <a [routerLink]="['/app/bills']" [queryParams]="{ projectId: p.id }" class="btn btn-ghost btn-sm">+ Bill</a>
         <a [routerLink]="['/app/assistants']" [queryParams]="{ projectId: p.id, projectName: p.name }" class="btn btn-ghost btn-sm">+ Assistant</a>

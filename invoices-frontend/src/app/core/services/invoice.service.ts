@@ -35,11 +35,9 @@ export class InvoiceService {
     return this.http.get<DashboardSummary>(`${this.base}/dashboard-summary`);
   }
 
-  getGstSummary(year?: number): Observable<GstSummary> {
-  const params: Record<string, string> = {};
-  if (year) params['year'] = year.toString();
-  return this.http.get<GstSummary>(`${this.base}/gst-summary`, { params });
-}
+  getGstSummary(): Observable<GstSummary> {
+    return this.http.get<GstSummary>(`${this.base}/gst-summary`);
+  }
 
   getClientLedger(clientId: string): Observable<ClientLedger> {
     return this.http.get<ClientLedger>(`${this.base}/client-ledger/${clientId}`);
@@ -63,16 +61,5 @@ export class InvoiceService {
 
   exportFiscalYearPdfUrl(): string {
     return `${this.base}/export-fiscal-year-pdf`;
-  }
-
-  getDraftForProject(projectName?: string, projectId?: string): Observable<any> {
-    const params: any = {};
-    if (projectName) params['projectName'] = projectName;
-    if (projectId) params['projectId'] = projectId;
-    return this.http.get<any>(`${this.base}/draft-for-project`, { params });
-  }
-
-  finaliseDraft(invoiceId: string): Observable<any> {
-    return this.http.put(`${this.base}/${invoiceId}/finalise-draft`, {});
   }
 }
