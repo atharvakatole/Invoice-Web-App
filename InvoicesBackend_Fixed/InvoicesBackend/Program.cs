@@ -92,6 +92,7 @@ builder.Services.AddCors(options =>
                   .WithMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
         });
 });
+builder.WebHost.UseUrls("http://+:" + (Environment.GetEnvironmentVariable("PORT") ?? "8080"));
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
