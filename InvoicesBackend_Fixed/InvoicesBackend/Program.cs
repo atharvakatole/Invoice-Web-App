@@ -107,10 +107,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowAngular");
 
-if (!app.Environment.IsDevelopment())
-{
-    app.UseHttpsRedirection();
-}
+// if (!app.Environment.IsDevelopment())
+// {
+//     app.UseHttpsRedirection();
+// }
 
 app.UseAuthentication();
 app.UseAuthorization();
