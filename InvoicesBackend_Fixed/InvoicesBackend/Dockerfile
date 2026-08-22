@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ../InvoiceTemplateEngine ./InvoiceTemplateEngine
-COPY . ./InvoicesBackend
+COPY InvoiceTemplateEngine ./InvoiceTemplateEngine
+COPY InvoicesBackend ./InvoicesBackend
 WORKDIR /src/InvoicesBackend
 RUN dotnet publish InvoicesBackend.csproj -c Release -o /app/out
 
