@@ -1,6 +1,0 @@
-{
-  "installCommand": "rm -rf node_modules && npm install --legacy-peer-deps",
-  "buildCommand": "npx ng build --configuration production",
-  "outputDirectory": "dist/invoices-frontend/browser",
-  "framework": "angular"
-}
