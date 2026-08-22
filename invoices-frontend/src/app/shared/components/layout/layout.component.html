@@ -69,7 +69,7 @@
         <span></span><span></span><span></span>
       </button>
       <div class="topbar-title">
-        <h2 class="topbar-greeting">Welcome<span class="text-gold" *ngIf="auth.user()?.fullName">, {{ auth.user()?.fullName?.split(' ')[0] }}</span></h2>
+        <h2 class="topbar-greeting">Welcome<span class="text-gold" *ngIf="auth.user()?.fullName">, {{ (auth.user()?.fullName ?? '').split(' ')[0] }}</span></h2>
       </div>
       <div class="topbar-actions">
         <div class="theme-picker-app">
