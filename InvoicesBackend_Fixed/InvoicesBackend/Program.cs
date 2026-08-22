@@ -71,28 +71,32 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
+
 builder.Services.AddScoped<PdfService>();
 builder.Services.AddScoped<ExcelService>();
 builder.Services.AddScoped<NotificationService>();
 builder.Services.AddHostedService<NotificationBackgroundService>();
+
 builder.Services.AddCors(options =>
 {
-    // Configure allowed origins via appsettings ("Cors:AllowedOrigins": ["https://yourapp.com"]).
-    // Falls back to the local dev server if nothing is configured.
-    var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
-    if (allowedOrigins == null || allowedOrigins.Length == 0)
-       { allowedOrigins = new[] { "http://localhost:4200" }; 
-       allowedOrigins = new[]{"https://invoice-web-j33e7j90m-project-1-2428.vercel.app/login"};};
-
     options.AddPolicy("AllowAngular",
         policy =>
         {
-            policy.WithOrigins(allowedOrigins)
-                  .AllowAnyHeader()
-                  .WithMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
+            policy.WithOrigins(
+                "http://localhost:4200",
+                "https://invoice-web-app-ebon.vercel.app"
+            )
+            .AllowAnyHeader()
+            .WithMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
         });
 });
-builder.WebHost.UseUrls("http://+:" + (Environment.GetEnvironmentVariable("PORT") ?? "8080"));
+
+var port = int.Parse(Environment.GetEnvironmentVariable("PORT") ?? "8080");
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(port);
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -111,10 +115,12 @@ if (!app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
 // Auto-run migrations on startup
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     db.Database.Migrate();
 }
+
 app.Run();
