@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "pVrMXeqPa1g=",
+  "success": true,
+  "projectFilePath": "C:\\Atharva\\New Invoices\\Git\\Invoice-Web-App\\InvoicesBackend_Fixed\\InvoiceTemplateEngine\\InvoiceTemplateEngine.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\athar\\.nuget\\packages\\pdfpig\\0.1.9\\pdfpig.0.1.9.nupkg.sha512",
+    "C:\\Users\\athar\\.nuget\\packages\\pdfsharpcore\\1.3.65\\pdfsharpcore.1.3.65.nupkg.sha512",
+    "C:\\Users\\athar\\.nuget\\packages\\sharpziplib\\1.4.2\\sharpziplib.1.4.2.nupkg.sha512",
+    "C:\\Users\\athar\\.nuget\\packages\\sixlabors.fonts\\1.0.0-beta17\\sixlabors.fonts.1.0.0-beta17.nupkg.sha512",
+    "C:\\Users\\athar\\.nuget\\packages\\sixlabors.imagesharp\\1.0.4\\sixlabors.imagesharp.1.0.4.nupkg.sha512"
+  ],
+  "logs": []
+}

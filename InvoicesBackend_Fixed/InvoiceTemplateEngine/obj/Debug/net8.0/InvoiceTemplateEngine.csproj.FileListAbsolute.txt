@@ -1,0 +1,13 @@
+C:\Atharva\New Invoices\Git\Invoice-Web-App\InvoicesBackend_Fixed\InvoiceTemplateEngine\bin\Debug\net8.0\InvoiceTemplateEngine.deps.json
+C:\Atharva\New Invoices\Git\Invoice-Web-App\InvoicesBackend_Fixed\InvoiceTemplateEngine\bin\Debug\net8.0\InvoiceTemplateEngine.dll
+C:\Atharva\New Invoices\Git\Invoice-Web-App\InvoicesBackend_Fixed\InvoiceTemplateEngine\bin\Debug\net8.0\InvoiceTemplateEngine.pdb
+C:\Atharva\New Invoices\Git\Invoice-Web-App\InvoicesBackend_Fixed\InvoiceTemplateEngine\obj\Debug\net8.0\InvoiceTemplateEngine.csproj.AssemblyReference.cache
+C:\Atharva\New Invoices\Git\Invoice-Web-App\InvoicesBackend_Fixed\InvoiceTemplateEngine\obj\Debug\net8.0\InvoiceTemplateEngine.GeneratedMSBuildEditorConfig.editorconfig
+C:\Atharva\New Invoices\Git\Invoice-Web-App\InvoicesBackend_Fixed\InvoiceTemplateEngine\obj\Debug\net8.0\InvoiceTemplateEngine.AssemblyInfoInputs.cache
+C:\Atharva\New Invoices\Git\Invoice-Web-App\InvoicesBackend_Fixed\InvoiceTemplateEngine\obj\Debug\net8.0\InvoiceTemplateEngine.AssemblyInfo.cs
+C:\Atharva\New Invoices\Git\Invoice-Web-App\InvoicesBackend_Fixed\InvoiceTemplateEngine\obj\Debug\net8.0\InvoiceTemplateEngine.csproj.CoreCompileInputs.cache
+C:\Atharva\New Invoices\Git\Invoice-Web-App\InvoicesBackend_Fixed\InvoiceTemplateEngine\obj\Debug\net8.0\InvoiceTemplateEngine.sourcelink.json
+C:\Atharva\New Invoices\Git\Invoice-Web-App\InvoicesBackend_Fixed\InvoiceTemplateEngine\obj\Debug\net8.0\InvoiceTemplateEngine.dll
+C:\Atharva\New Invoices\Git\Invoice-Web-App\InvoicesBackend_Fixed\InvoiceTemplateEngine\obj\Debug\net8.0\refint\InvoiceTemplateEngine.dll
+C:\Atharva\New Invoices\Git\Invoice-Web-App\InvoicesBackend_Fixed\InvoiceTemplateEngine\obj\Debug\net8.0\InvoiceTemplateEngine.pdb
+C:\Atharva\New Invoices\Git\Invoice-Web-App\InvoicesBackend_Fixed\InvoiceTemplateEngine\obj\Debug\net8.0\ref\InvoiceTemplateEngine.dll
