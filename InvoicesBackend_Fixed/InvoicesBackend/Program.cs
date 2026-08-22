@@ -87,7 +87,7 @@ builder.Services.AddCors(options =>
                 "https://invoice-web-app-ebon.vercel.app"
             )
             .AllowAnyHeader()
-            .WithMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
+            .AllowAnyMethod();
         });
 });
 
