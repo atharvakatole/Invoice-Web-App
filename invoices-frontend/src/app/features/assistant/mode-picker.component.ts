@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { AssistantPortalService } from '../../core/services/assistant-portal.service';
 import { UserRole } from '../../core/models/models';
+import { BrandMarkComponent } from '../../shared/components/brand-mark.component';
 
 @Component({
   selector: 'app-mode-picker',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, BrandMarkComponent],
   templateUrl: './mode-picker.component.html',
   styleUrl: './mode-picker.component.scss'
 })

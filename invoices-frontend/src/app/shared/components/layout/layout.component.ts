@@ -6,11 +6,12 @@ import { NotificationService } from '../../../core/services/notification.service
 import { BillingService } from '../../../core/services/billing.service';
 import { ThemeService } from '../../../core/services/theme.service';
 import { UserRole } from '../../../core/models/models';
+import { BrandMarkComponent } from '../brand-mark.component';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet],
+  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet, BrandMarkComponent],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss'
 })

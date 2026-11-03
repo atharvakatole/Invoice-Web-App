@@ -4,11 +4,12 @@ import { Router, RouterLink } from '@angular/router';
 import { ThemeService } from '../../core/services/theme.service';
 import { AuthService } from '../../core/services/auth.service';
 import { ConsentService } from '../../core/services/consent.service';
+import { BrandMarkComponent } from '../../shared/components/brand-mark.component';
 
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, BrandMarkComponent],
   templateUrl: './landing.component.html',
   styleUrl: './landing.component.scss'
 })

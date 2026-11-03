@@ -1,7 +1,7 @@
 <div class="mode-picker-bg">
   <div class="mode-picker-wrap fade-in" *ngIf="!loading()">
     <div class="mp-header">
-      <div class="mp-logo">IN</div>
+      <app-brand-mark class="mp-logo"></app-brand-mark>
       <h1>Welcome back, {{ (auth.user()?.fullName ?? '').split(' ')[0] }}</h1>
       <p>You have access to two modes. How are you working today?</p>
     </div>

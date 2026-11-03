@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { ThemeService } from '../../../core/services/theme.service';
+import { BrandMarkComponent } from '../../../shared/components/brand-mark.component';
 
 @Component({
   selector: 'app-assistant-layout',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet],
+  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet, BrandMarkComponent],
   templateUrl: './assistant-layout.component.html',
   styleUrl: './assistant-layout.component.scss'
 })
