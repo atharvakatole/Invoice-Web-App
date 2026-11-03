@@ -86,10 +86,7 @@ public class AuthController : ControllerBase
         var otp = Random.Shared.Next(100000, 999999).ToString();
         var otpHash = BCrypt.Net.BCrypt.HashPassword(otp, workFactor: 10);
 
-        // DEV: log OTP to console so it's visible without real email
-        _logger.LogWarning("🔑 OTP for {Email} [{Type}]: {OTP} (expires in 10 mins)", email, type, otp);
-
-        _context.OtpVerifications.Add(new OtpVerification
+        var otpRecord = new OtpVerification
         {
             Id = Guid.NewGuid(),
             Email = email,
@@ -97,7 +94,8 @@ public class AuthController : ControllerBase
             CodeHash = otpHash,
             ExpiresAt = DateTime.UtcNow.AddMinutes(10),
             CreatedAt = DateTime.UtcNow
-        });
+        };
+        _context.OtpVerifications.Add(otpRecord);
 
         await _context.SaveChangesAsync();
 
@@ -107,8 +105,10 @@ public class AuthController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500, $"Failed to send email: {ex.Message}. " +
-                "In Development mode, check the console for the OTP.");
+            otpRecord.IsUsed = true;
+            await _context.SaveChangesAsync();
+            _logger.LogError(ex, "Failed to send verification email for {Email} [{Type}]", email, type);
+            return StatusCode(500, "Failed to send email. Please try again later.");
         }
 
         return Ok(new { message = "OTP sent successfully" });

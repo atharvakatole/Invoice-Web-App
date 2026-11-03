@@ -16,6 +16,8 @@ builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<EmailService>();
 builder.Services.AddScoped<PlanGuardService>();
 builder.Services.AddHttpClient();
+builder.Services.AddHttpClient("transactional-email", client =>
+    client.Timeout = TimeSpan.FromSeconds(20));
 builder.Services.AddScoped<ExternalAuthService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
