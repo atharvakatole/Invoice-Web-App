@@ -12,6 +12,7 @@ import { ThemeService } from '../../../core/services/theme.service';
   styleUrl: './assistant-layout.component.scss'
 })
 export class AssistantLayoutComponent {
+  sidebarOpen = signal(false);
   profileMenuOpen = signal(false);
   themeMenuOpen = signal(false);
 
@@ -23,6 +24,9 @@ export class AssistantLayoutComponent {
   }
 
   logout() { this.auth.logout(); }
+
+  toggleSidebar() { this.sidebarOpen.update(open => !open); }
+  closeSidebar() { this.sidebarOpen.set(false); }
 
   switchToManager() {
     this.auth.setWorkMode('manager');

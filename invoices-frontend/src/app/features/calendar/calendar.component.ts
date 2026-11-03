@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CalendarService, CalendarEvent } from '../../core/services/calendar.service';
 import { ProjectDropdownService } from '../../core/services/project-dropdown.service';
 import { ToastService } from '../../core/services/toast.service';
+import { parseCalendarEventDate, serializeLocalCalendarDate } from './calendar-date.utils';
 
 interface DayCell {
   date: Date | null;
@@ -55,7 +56,8 @@ export class CalendarComponent implements OnInit {
       const date = new Date(year, month, day);
       const isToday = date.toDateString() === today.toDateString();
       const dayEvents = this.events().filter(e => {
-        const ed = new Date(e.date);
+        const ed = parseCalendarEventDate(e.date);
+        if (!ed) return false;
         return ed.getFullYear() === year && ed.getMonth() === month && ed.getDate() === day;
       });
       cells.push({ date, isToday, events: dayEvents });
@@ -152,10 +154,16 @@ export class CalendarComponent implements OnInit {
       ? this.newEventCustomProject().trim()
       : this.newEventProject();
 
+    const eventDate = serializeLocalCalendarDate(this.newDate());
+    if (!eventDate) {
+      this.toast.error('Pick a valid date');
+      return;
+    }
+
     this.saving.set(true);
     this.calendarService.createEvent(
       this.newTitle().trim(),
-      new Date(this.newDate()).toISOString(),
+      eventDate,
       this.newNotes().trim() || undefined,
       resolvedProject || undefined
     ).subscribe({

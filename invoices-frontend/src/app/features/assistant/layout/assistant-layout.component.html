@@ -1,5 +1,5 @@
 <div class="shell">
-  <aside class="sidebar">
+  <aside class="sidebar" [class.open]="sidebarOpen()">
     <div class="brand">
       <div class="brand-mark">IN</div>
       <div>
@@ -9,17 +9,17 @@
     </div>
 
     <nav class="nav">
-      <a routerLink="/assistant/dashboard" routerLinkActive="active">
-        <span class="nav-icon">📊</span> Dashboard
+      <a routerLink="/assistant/dashboard" routerLinkActive="active" (click)="closeSidebar()">
+        <span class="nav-icon" aria-hidden="true">▥</span> Dashboard
       </a>
-      <a routerLink="/assistant/assignments" routerLinkActive="active">
-        <span class="nav-icon">📋</span> Assignments
+      <a routerLink="/assistant/assignments" routerLinkActive="active" (click)="closeSidebar()">
+        <span class="nav-icon" aria-hidden="true">□</span> Assignments
       </a>
-      <a routerLink="/assistant/bills" routerLinkActive="active">
-        <span class="nav-icon">🧾</span> Bills
+      <a routerLink="/assistant/bills" routerLinkActive="active" (click)="closeSidebar()">
+        <span class="nav-icon" aria-hidden="true">▤</span> Bills
       </a>
-      <a routerLink="/assistant/returns" routerLinkActive="active">
-        <span class="nav-icon">🔄</span> Return Requests
+      <a routerLink="/assistant/returns" routerLinkActive="active" (click)="closeSidebar()">
+        <span class="nav-icon" aria-hidden="true">↻</span> Return Requests
       </a>
     </nav>
 
@@ -30,12 +30,17 @@
     </div>
   </aside>
 
+  <button class="mobile-backdrop" *ngIf="sidebarOpen()" (click)="closeSidebar()" aria-label="Close navigation"></button>
+
   <div class="main">
     <header class="topbar">
+      <button class="menu-toggle" (click)="toggleSidebar()" [attr.aria-expanded]="sidebarOpen()" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
       <div class="topbar-title">
         <div class="topbar-name-row">
           <h2 class="topbar-name">{{ auth.user()?.fullName }}</h2>
-          <span class="topbar-role-badge">🎨 Assistant Mode</span>
+          <span class="topbar-role-badge">Assistant mode</span>
         </div>
         <p class="topbar-email">{{ auth.user()?.email }}</p>
       </div>
@@ -64,13 +69,13 @@
             </div>
             <div class="profile-menu-divider"></div>
             <a routerLink="/assistant/change-password" class="profile-menu-item" (click)="profileMenuOpen.set(false)">
-              <span class="pm-icon">🔑</span> Change Password
+              <span class="pm-icon" aria-hidden="true">⌑</span> Change Password
             </a>
             <button class="profile-menu-item" (click)="switchToManager(); profileMenuOpen.set(false)">
               <span class="pm-icon">⇄</span> Switch to Manager
             </button>
             <button class="profile-menu-item danger" (click)="logout()">
-              <span class="pm-icon">🚪</span> Logout
+              <span class="pm-icon" aria-hidden="true">↗</span> Logout
             </button>
           </div>
         </div>

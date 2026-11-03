@@ -23,12 +23,12 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
   private onScroll = () => this.scrolled.set(window.scrollY > 20);
 
   features = [
-    { icon: '⚡', title: 'Lightning-fast invoicing', desc: 'Create branded, GST-ready invoices in seconds with smart line-item autocomplete and saved clients.' },
-    { icon: '📊', title: 'Real-time dashboard', desc: 'Track revenue, pending payments, and top clients with live charts that update as money moves.' },
-    { icon: '📁', title: 'Projects that connect everything', desc: 'Link invoices, bills, assistants, and schedules under one project — from kickoff to final payment.' },
-    { icon: '🧾', title: 'Expense & returns tracking', desc: 'Track what you buy from brands, handle partial returns, and turn client purchases into invoice line items.' },
-    { icon: '🔔', title: 'Never miss a deadline', desc: 'Automatic reminders for return dates, overdue invoices, and unpaid assistants.' },
-    { icon: '🎨', title: 'Your brand, your way', desc: 'Custom logos, colors, and PDF templates so every invoice looks unmistakably yours.' }
+    { icon: '↗', title: 'Fast, accurate invoicing', desc: 'Create branded, GST-ready invoices in seconds with smart line-item autocomplete and saved clients.' },
+    { icon: '▥', title: 'A clear business overview', desc: 'Track revenue, pending payments, and top clients with live charts that update as money moves.' },
+    { icon: '□', title: 'Connected project tracking', desc: 'Link invoices, bills, assistants, and schedules under one project — from kickoff to final payment.' },
+    { icon: '≋', title: 'Expense & returns tracking', desc: 'Track what you buy from brands, handle partial returns, and turn client purchases into invoice line items.' },
+    { icon: '◷', title: 'Deadline reminders', desc: 'Automatic reminders for return dates, overdue invoices, and unpaid assistants.' },
+    { icon: '▧', title: 'Your brand, your way', desc: 'Custom logos, colors, and PDF templates so every invoice looks unmistakably yours.' }
   ];
 
   steps = [

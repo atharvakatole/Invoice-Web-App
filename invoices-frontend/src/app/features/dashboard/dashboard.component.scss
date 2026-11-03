@@ -2,13 +2,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: var(--gradient-surface);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 36px 40px;
+  padding: 30px 32px;
   margin-bottom: 24px;
   position: relative;
-  overflow: hidden;
+  border-left: 3px solid var(--accent);
 }
 .eyebrow {
   font-size: 11px; text-transform: uppercase; letter-spacing: .14em;
@@ -140,4 +140,24 @@
   .expense-dash-strip { flex-direction: column; }
   .exp-stat { border-right: none; border-bottom: 1px solid var(--border); padding: 10px 0; }
   .exp-stat:last-child { border-bottom: none; }
+}
+
+.hero-text h1 { font-size: clamp(22px, 3vw, 28px); }
+.stat-grid { gap: 14px; }
+.stat-card { min-width: 0; }
+.stat-value { overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.quick-action { background: transparent; }
+.quick-action:hover { transform: none; }
+.bar-fill { background: var(--accent); }
+.chart { gap: clamp(3px, .75vw, 8px); }
+.bar-label { font-variant-numeric: tabular-nums; }
+@media (max-width: 520px) {
+  .stat-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .stat-card { padding: 12px; }
+  .stat-value { font-size: clamp(15px, 4vw, 19px); }
+  .stat-sub { font-size: 11px; }
+  .hero-banner { padding: 20px 16px; }
+  .hero-text .btn { width: 100%; }
+  .top-client-row { flex-wrap: wrap; }
+  .top-client-row > .mono { margin-left: 44px; }
 }

@@ -2,6 +2,7 @@ import { Component, AfterViewInit, ElementRef, EventEmitter, Output, ViewChild, 
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { UserRole } from '../../../core/models/models';
 import { SocialAuthService } from '../../../core/services/social-auth.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { environment } from '../../../../environments/environment';
@@ -78,7 +79,24 @@ export class SocialLoginComponent implements AfterViewInit {
         this.loadingProvider.set(null);
         this.toast.success('Welcome!');
         this.done.emit();
-        this.router.navigate(['/app/dashboard']);
+        const user = this.auth.user();
+        if (user?.role === UserRole.AssistantUser) {
+          this.auth.setWorkMode('assistant');
+          this.router.navigate(['/assistant/dashboard']);
+        } else if (user?.isAssistant) {
+          const savedMode = this.auth.getWorkMode();
+          if (savedMode === 'assistant') {
+            this.router.navigate(['/assistant/dashboard']);
+          } else if (savedMode === 'manager') {
+            this.router.navigate(['/app/dashboard']);
+          } else {
+            this.router.navigate(['/mode']);
+          }
+        } else {
+          // Match password login's manager-only fallback if the token is malformed or user is absent.
+          this.auth.setWorkMode('manager');
+          this.router.navigate(['/app/dashboard']);
+        }
       },
       error: (err) => {
         this.loadingProvider.set(null);

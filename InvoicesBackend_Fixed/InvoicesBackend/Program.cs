@@ -77,15 +77,23 @@ builder.Services.AddScoped<ExcelService>();
 builder.Services.AddScoped<NotificationService>();
 builder.Services.AddHostedService<NotificationBackgroundService>();
 
+var configuredAngularOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? Array.Empty<string>();
+var angularOrigins = new[]
+{
+    "http://localhost:4200",
+    "https://invoice-web-app-ebon.vercel.app"
+}
+.Concat(configuredAngularOrigins)
+.Where(origin => !string.IsNullOrWhiteSpace(origin))
+.Distinct(StringComparer.OrdinalIgnoreCase)
+.ToArray();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular",
         policy =>
         {
-            policy.WithOrigins(
-                "http://localhost:4200",
-                "https://invoice-web-app-ebon.vercel.app"
-            )
+            policy.WithOrigins(angularOrigins)
             .AllowAnyHeader()
             .AllowAnyMethod();
         });

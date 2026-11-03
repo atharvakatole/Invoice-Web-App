@@ -16,28 +16,28 @@
         <span class="ico">▤</span> Invoices
       </a>
       <a routerLink="/app/clients" routerLinkActive="active" (click)="closeSidebar()">
-        <span class="ico">👥</span> Clients
+        <span class="ico" aria-hidden="true">◉</span> Clients
       </a>
       <a routerLink="/app/projects" routerLinkActive="active" (click)="closeSidebar()">
-        <span class="ico">📋</span> Projects
+        <span class="ico" aria-hidden="true">□</span> Projects
       </a>
       <a routerLink="/app/invoices/new" routerLinkActive="active" (click)="closeSidebar()">
         <span class="ico">＋</span> New Invoice
       </a>
       <a routerLink="/app/calendar" routerLinkActive="active" (click)="closeSidebar()">
-        <span class="ico">📅</span> Schedule
+        <span class="ico" aria-hidden="true">▦</span> Schedule
       </a>
       <a routerLink="/app/assistants" routerLinkActive="active" (click)="closeSidebar()">
-        <span class="ico">🧑‍🤝‍🧑</span> Assistants
+        <span class="ico" aria-hidden="true">◌</span> Assistants
       </a>
       <a routerLink="/app/bills" routerLinkActive="active" (click)="closeSidebar()">
-        <span class="ico">🧾</span> Bills
+        <span class="ico" aria-hidden="true">▤</span> Bills
       </a>
       <a routerLink="/app/reports" routerLinkActive="active" (click)="closeSidebar()">
         <span class="ico">◔</span> Reports & GST
       </a>
       <a routerLink="/app/branding" routerLinkActive="active" (click)="closeSidebar()">
-        <span class="ico">🎨</span> Invoice Branding
+        <span class="ico" aria-hidden="true">✳</span> Invoice Branding
       </a>
       <a routerLink="/app/billing" routerLinkActive="active" (click)="closeSidebar()">
         <span class="ico">◆</span> Billing & Plan
@@ -55,7 +55,7 @@
       </div>
       <div class="plan-card premium-card" *ngIf="isPremium()">
         <p class="plan-label">Current Plan</p>
-        <p class="plan-name">⭐ Premium</p>
+        <p class="plan-name">Premium</p>
         <a routerLink="/app/billing" class="btn btn-ghost btn-sm btn-block" (click)="closeSidebar()">Manage</a>
       </div>
     </div>
@@ -85,11 +85,11 @@
             </button>
           </div>
         </div>
-        <a routerLink="/app/return-approvals" routerLinkActive="active" class="topbar-icon-btn" title="Return Approvals">
-          🔄
+        <a routerLink="/app/return-approvals" routerLinkActive="active" class="topbar-icon-btn" title="Return Approvals" aria-label="Return approvals">
+          ↻
         </a>
-        <a routerLink="/app/notifications" class="notif-bell" title="Notifications">
-          🔔
+        <a routerLink="/app/notifications" class="notif-bell" title="Notifications" aria-label="Notifications">
+          ♧
           <span class="notif-badge" *ngIf="notifService.unreadCount() > 0">
             {{ notifService.unreadCount() > 9 ? '9+' : notifService.unreadCount() }}
           </span>
@@ -105,13 +105,13 @@
             </div>
             <div class="profile-menu-divider"></div>
             <a routerLink="/app/change-password" class="profile-menu-item" (click)="profileMenuOpen.set(false)">
-              <span class="pm-icon">🔑</span> Change Password
+              <span class="pm-icon" aria-hidden="true">⌑</span> Change Password
             </a>
             <button class="profile-menu-item" *ngIf="auth.isAssistant()" (click)="switchMode(); profileMenuOpen.set(false)">
               <span class="pm-icon">⇄</span> Switch to Assistant
             </button>
             <button class="profile-menu-item danger" (click)="logout()">
-              <span class="pm-icon">🚪</span> Logout
+              <span class="pm-icon" aria-hidden="true">↗</span> Logout
             </button>
           </div>
         </div>

@@ -32,9 +32,12 @@ Update the API base URL in:
 ```ts
 export const environment = {
   production: false,
-  apiUrl: 'https://localhost:7000/api' // <-- point this to your backend
+  apiUrl: 'http://localhost:5248/api' // local backend HTTP profile
 };
 ```
+
+The development backend URL matches `InvoicesBackend_Fixed/InvoicesBackend/Properties/launchSettings.json`.
+Production API configuration remains in `environment.prod.ts`.
 
 ## Run
 
@@ -49,6 +52,8 @@ App runs at `http://localhost:4200`.
 ```bash
 npm run build
 ```
+
+For the isolated staging frontend, use `npm run build:staging`; it replaces the local development API URL with the staging API and disables social providers until staging credentials are configured.
 
 ## Notes on backend mapping
 

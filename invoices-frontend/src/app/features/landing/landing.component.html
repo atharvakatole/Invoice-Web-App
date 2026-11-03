@@ -20,7 +20,7 @@
             <span class="theme-current-dot"></span>
           </button>
           <div class="theme-menu" *ngIf="themePickerOpen()">
-            <p class="theme-menu-label">Pick a vibe</p>
+            <p class="theme-menu-label">Theme</p>
             <button *ngFor="let t of theme.themes" class="theme-option" [class.active]="theme.activeId() === t.id" (click)="selectTheme(t.id)">
               <span class="theme-swatch" [style.background]="t.swatch"></span>
               {{ t.name }}
@@ -45,7 +45,7 @@
     <div class="hero-grid-bg"></div>
 
     <div class="hero-content">
-      <div class="hero-badge fade-in">✨ Built for stylists, designers & freelancers</div>
+      <div class="hero-badge fade-in">Built for stylists, designers & freelancers</div>
       <h1 class="hero-title">
         Invoicing that feels
         <span class="text-gradient">effortless &amp; precise.</span>
@@ -201,7 +201,7 @@
     </div>
     <div class="footer-bottom">
       <span>© {{ year }} Invoicely. All rights reserved.</span>
-      <span>Made with care in India 🇮🇳</span>
+      <span>Made in India</span>
     </div>
   </footer>
 </div>
