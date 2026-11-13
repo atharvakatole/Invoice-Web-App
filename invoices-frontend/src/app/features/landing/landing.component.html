@@ -37,11 +37,6 @@
 
   <!-- ══ HERO ══ -->
   <section class="hero">
-    <div class="hero-orbs">
-      <div class="orb orb-1"></div>
-      <div class="orb orb-2"></div>
-      <div class="orb orb-3"></div>
-    </div>
     <div class="hero-grid-bg"></div>
 
     <div class="hero-content">
@@ -68,32 +63,40 @@
       </div>
     </div>
 
-    <!-- Floating invoice mockup -->
-    <div class="hero-visual" role="group" aria-label="Sample invoice and business summary">
-      <div class="visual-caption" aria-hidden="true"><span>INVOICELY / WORKSPACE 01</span><span>LIVE BILLING PREVIEW ↘</span></div>
-      <div class="float-card invoice-card">
-        <div class="fc-head">
-          <span class="mono fc-num">INV-29481</span>
-          <span class="badge badge-paid">Paid</span>
+    <!-- Illustrative product fragments, kept explicitly separate from live account data. -->
+    <div class="hero-visual editorial-tiles" role="group" aria-label="Illustrative Invoicely workflow: invoice, project, client, and payment">
+      <article class="scene-tile scene-invoice" aria-label="Sample invoice preview">
+        <div class="scene-topline"><span>01 / INVOICE</span><span class="scene-stamp">SAMPLE</span></div>
+        <div class="scene-invoice-paper">
+          <div class="scene-paper-head"><span>INVOICELY</span><span>INV–0001</span></div>
+          <div class="scene-paper-rule"></div>
+          <div class="scene-paper-row"><span>Project services</span><span>₹40,000</span></div>
+          <div class="scene-paper-row"><span>Tax</span><span>₹8,500</span></div>
+          <div class="scene-paper-total"><span>TOTAL</span><strong>₹48,500</strong></div>
         </div>
-        <div class="fc-line"><span>Bridal Styling — Full Day</span><span class="mono">₹35,000</span></div>
-        <div class="fc-line"><span>Assistant (2 days)</span><span class="mono">₹8,500</span></div>
-        <div class="fc-line"><span>GST (18%)</span><span class="mono">₹5,000</span></div>
-        <div class="fc-total"><span>Total</span><span class="mono text-gradient">₹48,500</span></div>
-        <div class="fc-bar"></div>
-      </div>
+      </article>
 
-      <div class="float-card mini-stat stat-a">
-        <span class="ms-label">Monthly revenue · sample</span>
-        <span class="ms-value text-gradient">₹1,82,400</span>
-        <span class="ms-trend">▲ 24% vs last month</span>
-      </div>
+      <article class="scene-tile scene-project" aria-label="Sample project overview">
+        <div class="scene-topline"><span>02 / PROJECT</span><span class="scene-index">SAMPLE / IN PROGRESS</span></div>
+        <h2>One project.<br>Every moving part.</h2>
+        <div class="scene-project-meta"><span>CLIENT WORKSPACE</span><span>INVOICE · BILLS · TEAM</span></div>
+        <div class="scene-project-rule"><span></span></div>
+      </article>
 
-      <div class="float-card mini-stat stat-b">
-        <span class="ms-label">Return due · sample</span>
-        <span class="ms-value">Red Lehenga</span>
-        <span class="ms-trend warn">in 2 days</span>
-      </div>
+      <article class="scene-tile scene-client" aria-label="Sample client workflow">
+        <div class="scene-topline"><span>03 / CLIENT</span><span class="scene-stamp">SAMPLE</span></div>
+        <div class="scene-client-name"><span class="scene-avatar" aria-hidden="true">C</span><div><strong>Client workspace</strong><small>Work, connected</small></div></div>
+        <ol class="scene-steps" aria-label="Client workflow stages">
+          <li><span>01</span>Brief</li><li><span>02</span>Project</li><li><span>03</span>Invoice</li>
+        </ol>
+      </article>
+
+      <article class="scene-tile scene-payment" aria-label="Sample payment status">
+        <div class="scene-topline"><span>04 / PAYMENT</span><span class="scene-stamp">SAMPLE</span></div>
+        <p class="scene-payment-label">INVOICE TOTAL</p>
+        <strong class="scene-payment-amount">₹48,500</strong>
+        <div class="scene-payment-status"><span aria-hidden="true"></span>Payment received</div>
+      </article>
     </div>
   </section>
 
