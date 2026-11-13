@@ -11,9 +11,9 @@ describe('ThemeService editorial theme regression', () => {
     service = new ThemeService();
   });
 
-  it('uses Linen for a first visit while retaining each available theme', () => {
+  it('uses Midnight for a first visit while retaining each available theme', () => {
     service.init();
-    expect(service.activeId()).toBe('linen');
+    expect(service.activeId()).toBe('midnight');
     expect(service.themes).toHaveLength(9);
   });
 
@@ -36,8 +36,8 @@ describe('ThemeService editorial theme regression', () => {
   });
 
   it('ignores unknown theme ids without disturbing the active theme', () => {
-    service.apply('linen', false);
+    service.apply('midnight', false);
     service.apply('missing-theme', false);
-    expect(service.activeId()).toBe('linen');
+    expect(service.activeId()).toBe('midnight');
   });
 });

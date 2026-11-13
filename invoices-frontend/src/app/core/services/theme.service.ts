@@ -289,13 +289,13 @@ export class ThemeService {
     }
   ];
 
-  activeId = signal<string>('linen');
+  activeId = signal<string>('midnight');
 
   private readonly COOKIE = 'invoicely_theme';
 
   init() {
     const saved = this.readCookie(this.COOKIE);
-    const theme = this.themes.find(t => t.id === saved) ?? this.themes.find(t => t.id === 'linen')!;
+    const theme = this.themes.find(t => t.id === saved) ?? this.themes.find(t => t.id === 'midnight')!;
     this.apply(theme.id, false);
   }
 
