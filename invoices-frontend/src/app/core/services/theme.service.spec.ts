@@ -1,7 +1,7 @@
-import { describe, expect, it, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { ThemeService } from './theme.service';
 
-describe('ThemeService editorial theme regression', () => {
+describe('ThemeService two-theme contract', () => {
   let service: ThemeService;
 
   beforeEach(() => {
@@ -11,33 +11,39 @@ describe('ThemeService editorial theme regression', () => {
     service = new ThemeService();
   });
 
-  it('uses Midnight for a first visit while retaining each available theme', () => {
+  it('offers exactly Dark and Light, defaulting new visitors to the black and blue theme', () => {
     service.init();
-    expect(service.activeId()).toBe('midnight');
-    expect(service.themes).toHaveLength(9);
+    expect(service.themes.map(theme => theme.name)).toEqual(['Dark', 'Light']);
+    expect(service.themes.map(theme => theme.id)).toEqual(['dark', 'light']);
+    expect(service.activeId()).toBe('dark');
+    expect(document.documentElement.style.getPropertyValue('--bg')).toBe('#050608');
+    expect(document.documentElement.style.getPropertyValue('--accent')).toBe('#315de5');
   });
 
-  it('restores a valid saved theme on initialization', () => {
+  it('restores either supported saved theme and falls back for retired theme cookies', () => {
+    document.cookie = 'invoicely_theme=light; path=/';
+    service.init();
+    expect(service.activeId()).toBe('light');
+    expect(document.documentElement.style.getPropertyValue('--bg')).toBe('#f2f4f8');
+
     document.cookie = 'invoicely_theme=forest; path=/';
     service.init();
-    expect(service.activeId()).toBe('forest');
-    expect(document.documentElement.style.getPropertyValue('--accent')).toBe('#34d399');
+    expect(service.activeId()).toBe('dark');
   });
 
-  it('updates the theme reactive surfaces and readable button text for every theme', () => {
+  it('updates surfaces, accent, and accessible button text for each supported theme', () => {
     for (const theme of service.themes) {
       service.apply(theme.id, false);
       expect(service.activeId()).toBe(theme.id);
+      expect(document.documentElement.style.getPropertyValue('--bg')).toBe(theme.vars['--bg']);
       expect(document.documentElement.style.getPropertyValue('--accent')).toBe(theme.vars['--accent']);
-      expect(document.documentElement.style.getPropertyValue('--on-accent')).toBe(theme.vars['--on-accent']);
-      expect(document.documentElement.style.getPropertyValue('--gradient-brand')).toBe('var(--accent)');
-      expect(document.documentElement.style.getPropertyValue('--gradient-surface')).toBe('var(--surface)');
+      expect(document.documentElement.style.getPropertyValue('--on-accent')).toBe('#ffffff');
     }
   });
 
-  it('ignores unknown theme ids without disturbing the active theme', () => {
-    service.apply('midnight', false);
-    service.apply('missing-theme', false);
-    expect(service.activeId()).toBe('midnight');
+  it('ignores unsupported theme ids without changing the active theme', () => {
+    service.apply('light', false);
+    service.apply('forest', false);
+    expect(service.activeId()).toBe('light');
   });
 });

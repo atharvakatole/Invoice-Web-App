@@ -63,51 +63,43 @@
       </div>
     </div>
 
-    <!-- Illustrative product fragments, kept explicitly separate from live account data. -->
-    <div class="hero-visual editorial-tiles" role="group" aria-label="Illustrative Invoicely workflow: invoice, project, client, and payment">
-      <article class="scene-tile scene-invoice" aria-label="Sample invoice preview">
-        <div class="scene-topline"><span>01 / INVOICE</span><span class="scene-stamp">SAMPLE</span></div>
-        <div class="scene-invoice-paper">
-          <div class="scene-paper-head"><span>INVOICELY</span><span>INV–0001</span></div>
-          <div class="scene-paper-rule"></div>
-          <div class="scene-paper-row"><span>Project services</span><span>₹40,000</span></div>
-          <div class="scene-paper-row"><span>Tax</span><span>₹8,500</span></div>
-          <div class="scene-paper-total"><span>TOTAL</span><strong>₹48,500</strong></div>
-        </div>
-      </article>
-
-      <article class="scene-tile scene-project" aria-label="Sample project overview">
-        <div class="scene-topline"><span>02 / PROJECT</span><span class="scene-index">SAMPLE / IN PROGRESS</span></div>
-        <h2>One project.<br>Every moving part.</h2>
-        <div class="scene-project-meta"><span>CLIENT WORKSPACE</span><span>INVOICE · BILLS · TEAM</span></div>
-        <div class="scene-project-rule"><span></span></div>
-      </article>
-
-      <article class="scene-tile scene-client" aria-label="Sample client workflow">
-        <div class="scene-topline"><span>03 / CLIENT</span><span class="scene-stamp">SAMPLE</span></div>
-        <div class="scene-client-name"><span class="scene-avatar" aria-hidden="true">C</span><div><strong>Client workspace</strong><small>Work, connected</small></div></div>
-        <ol class="scene-steps" aria-label="Client workflow stages">
-          <li><span>01</span>Brief</li><li><span>02</span>Project</li><li><span>03</span>Invoice</li>
-        </ol>
-      </article>
-
-      <article class="scene-tile scene-payment" aria-label="Sample payment status">
-        <div class="scene-topline"><span>04 / PAYMENT</span><span class="scene-stamp">SAMPLE</span></div>
-        <p class="scene-payment-label">INVOICE TOTAL</p>
-        <strong class="scene-payment-amount">₹48,500</strong>
-        <div class="scene-payment-status"><span aria-hidden="true"></span>Payment received</div>
-      </article>
-    </div>
   </section>
 
   <!-- ══ LOGOS / MARQUEE ══ -->
   <div class="marquee-wrap">
     <div class="marquee">
       <span *ngFor="let w of [1,2]" class="marquee-group">
-        Invoices · Projects · Clients · Bills · Assistants · Calendar · Reports · GST · Branding · Notifications ·
+        Services · Brand identity · Project workspaces · Event experiences · Payments · Documents · Invoices ·
       </span>
     </div>
   </div>
+
+  <section class="story-section" aria-label="A closer look at the Invoicely workflow">
+    <div class="story-stage-wrap">
+      <figure class="story-stage">
+        <ng-container *ngFor="let story of stories; let i = index">
+          <img *ngIf="activeStory() === i" [src]="story.image" [alt]="story.alt" [attr.fetchpriority]="i === 0 ? 'high' : 'auto'">
+        </ng-container>
+        <div class="story-image-shade" aria-hidden="true"></div>
+        <figcaption class="story-image-caption" aria-live="polite">
+          <span>{{ activeStory() + 1 < 10 ? '0' + (activeStory() + 1) : activeStory() + 1 }} / 05 — {{ stories[activeStory()].label }}</span>
+          <strong>{{ stories[activeStory()].title }}</strong>
+          <span class="story-image-index">INVOICELY / IN MOTION</span>
+          <span class="story-illustration-note">ILLUSTRATIVE STILL LIFE — NO ACCOUNT DATA</span>
+        </figcaption>
+      </figure>
+      <p class="story-stage-note">A connected workspace for independent work.</p>
+    </div>
+
+    <div class="story-chapters">
+      <article class="story-chapter" *ngFor="let story of stories; let i = index"
+        #storyChapter [attr.data-story-index]="i" [class.active]="activeStory() === i">
+        <div class="story-chapter-label"><span>{{ i + 1 < 10 ? '0' + (i + 1) : i + 1 }}</span>{{ story.label }}</div>
+        <h2>{{ story.title }}</h2>
+        <p>{{ story.description }}</p>
+      </article>
+    </div>
+  </section>
 
   <!-- ══ FEATURES ══ -->
   <section class="section" id="features">
