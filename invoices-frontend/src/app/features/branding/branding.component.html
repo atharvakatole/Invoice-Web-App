@@ -99,7 +99,7 @@
 
         <div class="field">
           <label>Your Name / Studio Name</label>
-          <input type="text" [ngModel]="config().footerName" (ngModelChange)="setFooterName($event)" placeholder="e.g. Aishwarya Gupta" />
+          <input type="text" [ngModel]="config().footerName" (ngModelChange)="setFooterName($event)" placeholder="Enter display name" />
         </div>
 
         <div class="field">
@@ -109,12 +109,12 @@
 
         <div class="field">
           <label>Subtitle (e.g. PAN / GST / License)</label>
-          <input type="text" [ngModel]="config().footerSubtitle" (ngModelChange)="setFooterSubtitle($event)" placeholder="e.g. PAN : BTSPG3322H" />
+          <input type="text" [ngModel]="config().footerSubtitle" (ngModelChange)="setFooterSubtitle($event)" placeholder="Enter an optional business or tax identifier" />
         </div>
 
         <div class="field">
           <label>Payment / Bank Details</label>
-          <textarea rows="8" [ngModel]="config().paymentDetails" (ngModelChange)="setPaymentDetails($event)" placeholder="BANK – AXIS&#10;ACCOUNT HOLDER – Your Name&#10;A/C NO. – 0000000000000&#10;IFSC – ABCD0000000&#10;UPI ID – yourname@okaxis"></textarea>
+          <textarea rows="8" [ngModel]="config().paymentDetails" (ngModelChange)="setPaymentDetails($event)" placeholder="Enter the payment details you want shown on invoices"></textarea>
           <span class="hint">Each line is printed as-is in the invoice footer.</span>
         </div>
 

@@ -21,13 +21,6 @@ const FIELD_LABELS: Record<string, string> = {
   Notes: 'Notes',
 };
 
-const DEFAULT_PAYMENT_DETAILS = `BANK – AXIS
-ACCOUNT HOLDER – Your Name
-A/C NO. – 0000000000000
-IFSC – ABCD0000000
-BRANCH – Your Branch
-UPI ID – yourname@okaxis`;
-
 @Component({
   selector: 'app-branding',
   standalone: true,
@@ -49,7 +42,7 @@ export class BrandingComponent implements OnInit {
     footerName: '',
     footerTitle: '',
     footerSubtitle: '',
-    paymentDetails: DEFAULT_PAYMENT_DETAILS,
+    paymentDetails: '',
   });
   loadingConfig = signal(true);
   savingConfig = signal(false);
@@ -85,7 +78,7 @@ export class BrandingComponent implements OnInit {
       next: (c) => {
         this.config.set({
           ...c,
-          paymentDetails: c.hasBranding ? c.paymentDetails : DEFAULT_PAYMENT_DETAILS
+          paymentDetails: c.paymentDetails ?? ''
         });
         this.loadingConfig.set(false);
         if (c.hasLogo) this.loadLogoPreview();
@@ -176,7 +169,7 @@ export class BrandingComponent implements OnInit {
       next: (saved) => {
         this.savingConfig.set(false);
         this.pendingLogoFile = null;
-        this.config.set({ ...saved, paymentDetails: saved.paymentDetails || DEFAULT_PAYMENT_DETAILS });
+        this.config.set({ ...saved, paymentDetails: saved.paymentDetails ?? c.paymentDetails });
         this.toast.success('Invoice design saved! New invoices will use this layout.');
       },
       error: (err) => {
@@ -197,7 +190,7 @@ export class BrandingComponent implements OnInit {
           footerName: '',
           footerTitle: '',
           footerSubtitle: '',
-          paymentDetails: DEFAULT_PAYMENT_DETAILS,
+          paymentDetails: '',
         });
         if (this.logoPreviewUrl()) {
           URL.revokeObjectURL(this.logoPreviewUrl()!);

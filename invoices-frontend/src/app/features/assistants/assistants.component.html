@@ -24,16 +24,16 @@
         <div class="field-row">
           <div class="field">
             <label>Name</label>
-            <input type="text" [ngModel]="newAssistantName()" (ngModelChange)="newAssistantName.set($event)" placeholder="e.g. Riya Shah" />
+            <input type="text" [ngModel]="newAssistantName()" (ngModelChange)="newAssistantName.set($event)" placeholder="Enter assistant name" />
           </div>
           <div class="field">
             <label>Phone (optional)</label>
-            <input type="text" [ngModel]="newAssistantPhone()" (ngModelChange)="newAssistantPhone.set($event)" placeholder="+91 90000 00000" />
+            <input type="text" [ngModel]="newAssistantPhone()" (ngModelChange)="newAssistantPhone.set($event)" placeholder="Enter phone number" />
           </div>
         </div>
         <div class="field">
           <label>Email <span class="text-faint" style="font-size:12px;">(sends login invite)</span></label>
-          <input type="email" [ngModel]="newAssistantEmail()" (ngModelChange)="newAssistantEmail.set($event)" placeholder="riya@gmail.com" />
+          <input type="email" [ngModel]="newAssistantEmail()" (ngModelChange)="newAssistantEmail.set($event)" placeholder="Enter email address" />
           <span class="hint">An account will be created with phone number as default password.</span>
         </div>
       </ng-container>

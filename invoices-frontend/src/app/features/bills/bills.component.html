@@ -134,7 +134,7 @@
       </div>
       <div class="field">
         <label>Brand Name</label>
-        <input type="text" [ngModel]="billForm().brandName" (ngModelChange)="setBillField('brandName', $event)" placeholder="e.g. Zara" />
+        <input type="text" [ngModel]="billForm().brandName" (ngModelChange)="setBillField('brandName', $event)" placeholder="Enter brand or vendor name" />
       </div>
     </div>
 
@@ -166,7 +166,7 @@
         <div class="item-row-top">
           <div class="field">
             <label>Item Name</label>
-            <input type="text" [ngModel]="row.itemName" (ngModelChange)="setItemField(i, 'itemName', $event)" placeholder="e.g. Red Lehenga" />
+            <input type="text" [ngModel]="row.itemName" (ngModelChange)="setItemField(i, 'itemName', $event)" placeholder="Enter item name" />
           </div>
           <div class="field">
             <label>Qty</label>

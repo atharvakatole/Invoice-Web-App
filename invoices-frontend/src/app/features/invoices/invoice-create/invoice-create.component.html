@@ -24,7 +24,7 @@
             <div class="autocomplete-wrap">
               <input
                 formControlName="clientName"
-                placeholder="Jane Cooper"
+                placeholder="Enter client name"
                 (input)="onClientNameInput($any($event.target).value)"
                 (focus)="onClientNameInput(form.get('clientName')?.value || '')"
                 (blur)="hideClientSuggestions()"
@@ -40,14 +40,14 @@
           </div>
           <div class="field">
             <label>Client Email</label>
-            <input type="email" formControlName="clientEmail" placeholder="jane@client.com" />
+            <input type="email" formControlName="clientEmail" placeholder="Enter client email" />
             <span class="error" *ngIf="form.get('clientEmail')?.touched && form.get('clientEmail')?.invalid">A valid email is required</span>
           </div>
         </div>
         <div class="field-row">
           <div class="field">
             <label>Client Phone</label>
-            <input formControlName="clientPhone" placeholder="+91 90000 00000" />
+            <input formControlName="clientPhone" placeholder="Enter client phone number" />
           </div>
           <div class="field">
             <label>Due Date</label>
@@ -90,7 +90,7 @@
               <div class="autocomplete-wrap">
                 <input
                   formControlName="projectName"
-                  placeholder="e.g. GPS Movie Promotions"
+                  placeholder="Enter project or service name"
                   (input)="onProjectInput(i, $any($event.target).value)"
                   (focus)="onProjectInput(i, item.get('projectName')?.value || '')"
                   (blur)="hideProjectSuggestions()"

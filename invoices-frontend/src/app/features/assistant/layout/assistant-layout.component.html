@@ -9,16 +9,16 @@
     </div>
 
     <nav class="nav" aria-label="Assistant navigation">
-      <a routerLink="/assistant/dashboard" routerLinkActive="active" (click)="closeSidebar()">
+      <a routerLink="/assistant/dashboard" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="closeSidebar()">
         <span class="nav-icon" aria-hidden="true">▥</span> Dashboard
       </a>
-      <a routerLink="/assistant/assignments" routerLinkActive="active" (click)="closeSidebar()">
+      <a routerLink="/assistant/assignments" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="closeSidebar()">
         <span class="nav-icon" aria-hidden="true">□</span> Assignments
       </a>
-      <a routerLink="/assistant/bills" routerLinkActive="active" (click)="closeSidebar()">
+      <a routerLink="/assistant/bills" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="closeSidebar()">
         <span class="nav-icon" aria-hidden="true">▤</span> Bills
       </a>
-      <a routerLink="/assistant/returns" routerLinkActive="active" (click)="closeSidebar()">
+      <a routerLink="/assistant/returns" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="closeSidebar()">
         <span class="nav-icon" aria-hidden="true">↻</span> Return Requests
       </a>
     </nav>

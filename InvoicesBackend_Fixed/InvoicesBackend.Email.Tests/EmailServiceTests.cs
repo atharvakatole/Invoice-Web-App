@@ -24,7 +24,7 @@ public sealed class EmailServiceTests
         Assert.Equal("https://api.brevo.com/v3/smtp/email", handler.Url);
         Assert.Equal("test-api-key", handler.ApiKey);
         using var json = JsonDocument.Parse(handler.Body!);
-        Assert.Equal("atharvakatole1999@gmail.com", json.RootElement.GetProperty("sender").GetProperty("email").GetString());
+        Assert.Equal("verified-sender@example.test", json.RootElement.GetProperty("sender").GetProperty("email").GetString());
         Assert.Equal("recipient@example.com", json.RootElement.GetProperty("to")[0].GetProperty("email").GetString());
         Assert.Equal("Your Invoicely verification code", json.RootElement.GetProperty("subject").GetString());
         Assert.Contains("123456", json.RootElement.GetProperty("htmlContent").GetString());
@@ -88,7 +88,7 @@ public sealed class EmailServiceTests
             {
                 ["Email:Provider"] = "Brevo",
                 ["Email:ApiKey"] = apiKey,
-                ["Email:FromAddress"] = "atharvakatole1999@gmail.com",
+                ["Email:FromAddress"] = "verified-sender@example.test",
                 ["Email:FromName"] = "Invoicely",
                 ["Email:FrontendBaseUrl"] = "https://invoice-web-app-ebon.vercel.app"
             })

@@ -9,40 +9,40 @@
     </div>
 
     <nav class="nav" aria-label="Main navigation">
-      <a routerLink="/app/dashboard" routerLinkActive="active" (click)="closeSidebar()">
+      <a routerLink="/app/dashboard" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="closeSidebar()">
         <span class="ico">◧</span> Dashboard
       </a>
-      <a routerLink="/app/invoices" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeSidebar()">
+      <a routerLink="/app/invoices" routerLinkActive="active" ariaCurrentWhenActive="page" [routerLinkActiveOptions]="{exact: true}" (click)="closeSidebar()">
         <span class="ico">▤</span> Invoices
       </a>
-      <a routerLink="/app/clients" routerLinkActive="active" (click)="closeSidebar()">
+      <a routerLink="/app/clients" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="closeSidebar()">
         <span class="ico" aria-hidden="true">◉</span> Clients
       </a>
-      <a routerLink="/app/projects" routerLinkActive="active" (click)="closeSidebar()">
+      <a routerLink="/app/projects" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="closeSidebar()">
         <span class="ico" aria-hidden="true">□</span> Projects
       </a>
-      <a routerLink="/app/invoices/new" routerLinkActive="active" (click)="closeSidebar()">
+      <a routerLink="/app/invoices/new" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="closeSidebar()">
         <span class="ico">＋</span> New Invoice
       </a>
-      <a routerLink="/app/calendar" routerLinkActive="active" (click)="closeSidebar()">
+      <a routerLink="/app/calendar" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="closeSidebar()">
         <span class="ico" aria-hidden="true">▦</span> Schedule
       </a>
-      <a routerLink="/app/assistants" routerLinkActive="active" (click)="closeSidebar()">
+      <a routerLink="/app/assistants" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="closeSidebar()">
         <span class="ico" aria-hidden="true">◌</span> Assistants
       </a>
-      <a routerLink="/app/bills" routerLinkActive="active" (click)="closeSidebar()">
+      <a routerLink="/app/bills" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="closeSidebar()">
         <span class="ico" aria-hidden="true">▤</span> Bills
       </a>
-      <a routerLink="/app/reports" routerLinkActive="active" (click)="closeSidebar()">
+      <a routerLink="/app/reports" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="closeSidebar()">
         <span class="ico">◔</span> Reports & GST
       </a>
-      <a routerLink="/app/branding" routerLinkActive="active" (click)="closeSidebar()">
+      <a routerLink="/app/branding" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="closeSidebar()">
         <span class="ico" aria-hidden="true">✳</span> Invoice Branding
       </a>
-      <a routerLink="/app/billing" routerLinkActive="active" (click)="closeSidebar()">
+      <a routerLink="/app/billing" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="closeSidebar()">
         <span class="ico">◆</span> Billing & Plan
       </a>
-      <a *ngIf="auth.user()?.role === UserRole.SuperAdmin" routerLink="/app/admin" routerLinkActive="active" (click)="closeSidebar()">
+      <a *ngIf="auth.user()?.role === UserRole.SuperAdmin" routerLink="/app/admin" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="closeSidebar()">
         <span class="ico">⚙</span> Admin
       </a>
     </nav>
@@ -85,7 +85,7 @@
             </button>
           </div>
         </div>
-        <a routerLink="/app/return-approvals" routerLinkActive="active" class="topbar-icon-btn" title="Return Approvals" aria-label="Return approvals">
+        <a routerLink="/app/return-approvals" routerLinkActive="active" ariaCurrentWhenActive="page" class="topbar-icon-btn" title="Return Approvals" aria-label="Return approvals">
           ↻
         </a>
         <a routerLink="/app/notifications" class="notif-bell" title="Notifications" aria-label="Notifications">

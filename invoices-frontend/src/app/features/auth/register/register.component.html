@@ -5,16 +5,16 @@
     <h2>Create your workspace</h2>
     <p class="text-dim">Set up your account and business profile to start invoicing in minutes.</p>
 
-    <form [formGroup]="form" (ngSubmit)="sendOtpAndNext()" class="mt-24">
+    <form [formGroup]="form" (ngSubmit)="sendOtpAndNext()" class="mt-24" autocomplete="off">
       <div class="field-row">
         <div class="field">
           <label>Full Name</label>
-          <input formControlName="fullName" placeholder="Aishwarya Gupta" />
+          <input formControlName="fullName" placeholder="Enter your full name" autocomplete="off" />
           <span class="error" *ngIf="form.get('fullName')?.touched && form.get('fullName')?.invalid">Required</span>
         </div>
         <div class="field">
           <label>Username</label>
-          <input formControlName="username" placeholder="aishwarya" />
+          <input formControlName="username" placeholder="Choose a username" autocomplete="off" />
           <span class="error" *ngIf="form.get('username')?.touched && form.get('username')?.invalid">Required</span>
         </div>
       </div>
@@ -22,12 +22,12 @@
       <div class="field-row">
         <div class="field">
           <label>Email</label>
-          <input type="email" formControlName="email" placeholder="you@business.com" autocomplete="email" />
+          <input type="email" formControlName="email" placeholder="Enter your email address" autocomplete="off" />
           <span class="error" *ngIf="form.get('email')?.touched && form.get('email')?.invalid">Enter a valid email</span>
         </div>
         <div class="field">
           <label>Phone (optional)</label>
-          <input formControlName="phoneNumber" placeholder="+91 98765 43210" />
+          <input type="tel" formControlName="phoneNumber" placeholder="Enter your phone number" autocomplete="off" />
         </div>
       </div>
 
@@ -45,12 +45,12 @@
       <div class="field-row">
         <div class="field">
           <label>Business Name</label>
-          <input formControlName="businessName" placeholder="Acme Studio" />
+          <input formControlName="businessName" placeholder="Enter your business name" autocomplete="off" />
           <span class="error" *ngIf="form.get('businessName')?.touched && form.get('businessName')?.invalid">Required</span>
         </div>
         <div class="field">
           <label>Business Email</label>
-          <input type="email" formControlName="businessEmail" placeholder="billing@acmestudio.com" />
+          <input type="email" formControlName="businessEmail" placeholder="Enter your business email" autocomplete="off" />
           <span class="error" *ngIf="form.get('businessEmail')?.touched && form.get('businessEmail')?.invalid">Enter a valid email</span>
         </div>
       </div>
@@ -69,7 +69,7 @@
     <div class="otp-header">
       <div class="otp-icon">📧</div>
       <h2>Check your email</h2>
-      <p class="text-dim">We sent a 6-digit code to <strong>{{ form.value.email }}</strong>. It expires in 10 minutes.</p>
+      <p class="text-dim">We sent a 6-digit code to the email address you entered. It expires in 10 minutes.</p>
     </div>
 
     <form [formGroup]="form" (ngSubmit)="submit()" class="mt-24">
