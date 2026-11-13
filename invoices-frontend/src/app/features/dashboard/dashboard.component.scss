@@ -161,3 +161,22 @@
   .top-client-row { flex-wrap: wrap; }
   .top-client-row > .mono { margin-left: 44px; }
 }
+
+/* Editorial overview: clear money signals, quieter surfaces, and a useful hierarchy. */
+.hero-banner { background: var(--surface-2); border: 1px solid var(--border); border-radius: 4px; box-shadow: none; min-height: 220px; position: relative; overflow: hidden; }
+.hero-banner::after { content: '01'; position: absolute; right: clamp(18px, 5vw, 64px); bottom: -38px; color: var(--accent-tint-strong); font: 700 clamp(120px, 18vw, 240px)/1 var(--font-display); letter-spacing: -.08em; pointer-events: none; }
+.hero-text { position: relative; z-index: 1; max-width: 640px; }
+.hero-text .eyebrow { color: var(--accent); letter-spacing: .14em; }
+.hero-text h1 { font: 500 clamp(32px, 5vw, 54px)/1.02 var(--font-display); letter-spacing: -.045em; max-width: 540px; }
+.hero-text p { max-width: 480px; line-height: 1.65; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; box-shadow: none; }
+.stat-card:first-child { border-top: 2px solid var(--accent); }
+.dash .grid-2 > .card, .dash > .card { border-radius: 4px; box-shadow: none; }
+.dash h3 { font-family: var(--font-display); font-weight: 500; letter-spacing: -.02em; }
+.quick-action { border: 1px solid var(--border); border-radius: 4px; min-height: 72px; }
+.quick-action:hover { border-color: var(--border-strong); background: var(--surface-2); }
+@media (max-width: 520px) {
+  .hero-banner { min-height: 0; }
+  .hero-banner::after { right: -4px; bottom: -20px; font-size: 112px; }
+  .hero-text h1 { max-width: 300px; }
+}

@@ -1,5 +1,5 @@
 <div class="shell">
-  <aside class="sidebar" [class.open]="sidebarOpen()">
+  <aside id="manager-sidebar" class="sidebar" [class.open]="sidebarOpen()">
     <div class="brand">
       <app-brand-mark class="brand-mark"></app-brand-mark>
       <div class="brand-text">
@@ -8,7 +8,7 @@
       </div>
     </div>
 
-    <nav class="nav">
+    <nav class="nav" aria-label="Main navigation">
       <a routerLink="/app/dashboard" routerLinkActive="active" (click)="closeSidebar()">
         <span class="ico">◧</span> Dashboard
       </a>
@@ -65,7 +65,7 @@
 
   <div class="main">
     <header class="topbar">
-      <button class="hamburger" (click)="toggleSidebar()" aria-label="Toggle menu">
+      <button class="hamburger" (click)="toggleSidebar()" [attr.aria-expanded]="sidebarOpen()" aria-controls="manager-sidebar" aria-label="Toggle navigation">
         <span></span><span></span><span></span>
       </button>
       <div class="topbar-title">
@@ -73,7 +73,7 @@
       </div>
       <div class="topbar-actions">
         <div class="theme-picker-app">
-          <button class="theme-toggle-app" (click)="themeMenuOpen.set(!themeMenuOpen())" aria-label="Change theme" title="Change theme">
+          <button class="theme-toggle-app" (click)="themeMenuOpen.set(!themeMenuOpen())" [attr.aria-expanded]="themeMenuOpen()" aria-label="Change theme" title="Change theme">
             <span class="theme-current-dot"></span>
           </button>
           <div class="theme-menu-app" *ngIf="themeMenuOpen()">

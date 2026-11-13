@@ -29,11 +29,12 @@ export class ThemeService {
         '--surface-3': '#182242',
         '--navy': '#0f1b3d',
         '--text': '#eef1fb',
-        '--text-dim': '#98a2c3',
-        '--text-faint': '#5e6890',
+        '--text-dim': '#c0c5d2',
+        '--text-faint': '#999faf',
         '--accent': '#4f7cff',
         '--accent-2': '#22d3ee',
         '--gold': '#f5c451',
+        '--on-accent': '#111827',
         '--border': 'rgba(148,163,209,0.12)',
         '--border-strong': 'rgba(148,163,209,0.22)',
         '--gradient-brand': 'linear-gradient(135deg, #4f7cff 0%, #22d3ee 100%)',
@@ -58,11 +59,12 @@ export class ThemeService {
         '--surface-3': '#3a1a1a',
         '--navy': '#2a1010',
         '--text': '#eef1fb',
-        '--text-dim': '#98a2c3',
-        '--text-faint': '#5e6890',
+        '--text-dim': '#c9b7ad',
+        '--text-faint': '#aa978c',
         '--accent': '#ff5b5b',
         '--accent-2': '#ff9d4d',
         '--gold': '#ffcf6b',
+        '--on-accent': '#32100e',
         '--border': 'rgba(255,180,160,0.12)',
         '--border-strong': 'rgba(255,180,160,0.22)',
         '--gradient-brand': 'linear-gradient(135deg, #ff5b5b 0%, #ff9d4d 100%)',
@@ -87,11 +89,12 @@ export class ThemeService {
         '--surface-3': '#16382b',
         '--navy': '#0c2a20',
         '--text': '#eef1fb',
-        '--text-dim': '#98a2c3',
-        '--text-faint': '#5e6890',
+        '--text-dim': '#b4c9bc',
+        '--text-faint': '#90aa9a',
         '--accent': '#34d399',
         '--accent-2': '#2dd4bf',
         '--gold': '#a7f3d0',
+        '--on-accent': '#062a1d',
         '--border': 'rgba(160,230,200,0.12)',
         '--border-strong': 'rgba(160,230,200,0.22)',
         '--gradient-brand': 'linear-gradient(135deg, #34d399 0%, #2dd4bf 100%)',
@@ -116,11 +119,12 @@ export class ThemeService {
         '--surface-3': '#2c1a4a',
         '--navy': '#1c1038',
         '--text': '#eef1fb',
-        '--text-dim': '#98a2c3',
-        '--text-faint': '#5e6890',
+        '--text-dim': '#c4b6d0',
+        '--text-faint': '#a899b7',
         '--accent': '#a855f7',
         '--accent-2': '#ec4899',
         '--gold': '#f0abfc',
+        '--on-accent': '#1c0c2c',
         '--border': 'rgba(210,180,245,0.12)',
         '--border-strong': 'rgba(210,180,245,0.22)',
         '--gradient-brand': 'linear-gradient(135deg, #a855f7 0%, #ec4899 100%)',
@@ -145,11 +149,12 @@ export class ThemeService {
         '--surface-3': '#3a2e1f',
         '--navy': '#2a2117',
         '--text': '#eef1fb',
-        '--text-dim': '#98a2c3',
-        '--text-faint': '#5e6890',
+        '--text-dim': '#c9bda9',
+        '--text-faint': '#aa9e8b',
         '--accent': '#d4a574',
         '--accent-2': '#e8c39e',
         '--gold': '#f0d9b5',
+        '--on-accent': '#302114',
         '--border': 'rgba(230,210,180,0.12)',
         '--border-strong': 'rgba(230,210,180,0.22)',
         '--gradient-brand': 'linear-gradient(135deg, #d4a574 0%, #e8c39e 100%)',
@@ -175,10 +180,11 @@ export class ThemeService {
         '--navy': '#dbe3f0',
         '--text': '#1a2236',
         '--text-dim': '#55617d',
-        '--text-faint': '#8a93a8',
+        '--text-faint': '#667186',
         '--accent': '#2563eb',
         '--accent-2': '#0891b2',
         '--gold': '#d99e2b',
+        '--on-accent': '#ffffff',
         '--border': 'rgba(30,50,90,0.10)',
         '--border-strong': 'rgba(30,50,90,0.18)',
         '--gradient-brand': 'linear-gradient(135deg, #2563eb 0%, #06b6d4 100%)',
@@ -204,10 +210,11 @@ export class ThemeService {
         '--navy': '#f3d4e0',
         '--text': '#1a2236',
         '--text-dim': '#55617d',
-        '--text-faint': '#8a93a8',
+        '--text-faint': '#725b69',
         '--accent': '#e11d76',
         '--accent-2': '#f43f5e',
         '--gold': '#e0991b',
+        '--on-accent': '#ffffff',
         '--border': 'rgba(120,30,70,0.10)',
         '--border-strong': 'rgba(120,30,70,0.18)',
         '--gradient-brand': 'linear-gradient(135deg, #e11d76 0%, #fb7185 100%)',
@@ -233,10 +240,11 @@ export class ThemeService {
         '--navy': '#c8e6d6',
         '--text': '#1a2236',
         '--text-dim': '#55617d',
-        '--text-faint': '#8a93a8',
+        '--text-faint': '#5c7568',
         '--accent': '#059669',
         '--accent-2': '#0d9488',
         '--gold': '#4d9e7a',
+        '--on-accent': '#ffffff',
         '--border': 'rgba(10,80,55,0.10)',
         '--border-strong': 'rgba(10,80,55,0.18)',
         '--gradient-brand': 'linear-gradient(135deg, #059669 0%, #0d9488 100%)',
@@ -254,20 +262,21 @@ export class ThemeService {
       name: 'Linen',
       swatch: 'linear-gradient(135deg, #b45309, #d97706)',
       vars: {
-        '--bg': '#faf6f0',
-        '--bg-soft': '#ffffff',
-        '--surface': '#ffffff',
-        '--surface-2': '#f4ece0',
-        '--surface-3': '#ece0cf',
-        '--navy': '#e2d3bd',
-        '--text': '#1a2236',
-        '--text-dim': '#55617d',
-        '--text-faint': '#8a93a8',
-        '--accent': '#b45309',
-        '--accent-2': '#d97706',
-        '--gold': '#a07333',
-        '--border': 'rgba(90,60,20,0.10)',
-        '--border-strong': 'rgba(90,60,20,0.18)',
+        '--bg': '#f4f0e7',
+        '--bg-soft': '#faf8f2',
+        '--surface': '#fffdf8',
+        '--surface-2': '#ece6da',
+        '--surface-3': '#ddd5c7',
+        '--navy': '#e5dccd',
+        '--text': '#292821',
+        '--text-dim': '#625f55',
+        '--text-faint': '#777266',
+        '--accent': '#8f442e',
+        '--accent-2': '#365c4c',
+        '--gold': '#9c7136',
+        '--on-accent': '#fffaf2',
+        '--border': 'rgba(48,41,29,0.12)',
+        '--border-strong': 'rgba(48,41,29,0.24)',
         '--gradient-brand': 'linear-gradient(135deg, #b45309 0%, #d97706 100%)',
         '--gradient-surface': 'linear-gradient(160deg, #ffffff 0%, #faf6f0 100%)',
         '--gradient-bg': 'radial-gradient(ellipse 1200px 800px at 80% -10%, rgba(180,83,9,0.08), transparent 60%), radial-gradient(ellipse 900px 700px at -10% 110%, rgba(217,119,6,0.07), transparent 55%), #faf6f0',
@@ -280,13 +289,13 @@ export class ThemeService {
     }
   ];
 
-  activeId = signal<string>('midnight');
+  activeId = signal<string>('linen');
 
   private readonly COOKIE = 'invoicely_theme';
 
   init() {
     const saved = this.readCookie(this.COOKIE);
-    const theme = this.themes.find(t => t.id === saved) ?? this.themes[0];
+    const theme = this.themes.find(t => t.id === saved) ?? this.themes.find(t => t.id === 'linen')!;
     this.apply(theme.id, false);
   }
 
@@ -299,6 +308,11 @@ export class ThemeService {
     for (const [key, value] of Object.entries(theme.vars)) {
       root.style.setProperty(key, value);
     }
+    // Keep the product surfaces flat and editorial while all colors still follow the selected theme.
+    root.style.setProperty('--gradient-brand', 'var(--accent)');
+    root.style.setProperty('--gradient-surface', 'var(--surface)');
+    root.style.setProperty('--gradient-bg', 'var(--bg)');
+    root.style.setProperty('--gradient-gold', 'var(--gold)');
 
     // Only persist if the user has accepted functional cookies (or no banner shown).
     if (persist && this.functionalCookiesAllowed()) {

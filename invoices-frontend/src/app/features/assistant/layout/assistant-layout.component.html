@@ -8,7 +8,7 @@
       </div>
     </div>
 
-    <nav class="nav">
+    <nav class="nav" aria-label="Assistant navigation">
       <a routerLink="/assistant/dashboard" routerLinkActive="active" (click)="closeSidebar()">
         <span class="nav-icon" aria-hidden="true">▥</span> Dashboard
       </a>
@@ -46,7 +46,7 @@
       </div>
       <div class="topbar-actions">
         <div class="theme-picker-app">
-          <button class="theme-toggle-app" (click)="themeMenuOpen.set(!themeMenuOpen())" title="Change theme">
+          <button class="theme-toggle-app" (click)="themeMenuOpen.set(!themeMenuOpen())" [attr.aria-expanded]="themeMenuOpen()" aria-label="Change theme" title="Change theme">
             <span class="theme-current-dot"></span>
           </button>
           <div class="theme-menu-app" *ngIf="themeMenuOpen()">
@@ -59,7 +59,7 @@
           </div>
         </div>
         <div class="profile-menu-wrap">
-          <button class="profile-btn avatar" (click)="profileMenuOpen.set(!profileMenuOpen())">
+          <button class="profile-btn avatar" (click)="profileMenuOpen.set(!profileMenuOpen())" [attr.aria-expanded]="profileMenuOpen()" aria-label="Profile menu">
             {{ initials() }}
           </button>
           <div class="profile-menu" *ngIf="profileMenuOpen()">

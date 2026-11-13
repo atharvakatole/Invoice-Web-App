@@ -35,3 +35,16 @@
   .stats-strip { grid-template-columns: 1fr 1fr; }
   .dash-grid { grid-template-columns: 1fr; }
 }
+
+/* Match the manager overview with compact, calm work surfaces. */
+.page-header h1, .page-header h2 { font: 500 clamp(28px, 4vw, 40px)/1.08 var(--font-display); letter-spacing: -.04em; }
+.stats-strip .stat-card { border-radius: 4px; box-shadow: none; }
+.dash-grid > .card { border-radius: 4px; box-shadow: none; }
+.assignment-row, .return-row { border-color: var(--border); }
+@media (max-width: 520px) {
+  .stats-strip { gap: 8px; }
+  .stats-strip .stat-card { padding: 12px; }
+  .stats-strip .stat-card strong { font-size: clamp(16px, 5vw, 20px); overflow-wrap: anywhere; }
+  .assignment-row { flex-direction: column; }
+  .assign-actions { width: 100%; flex-wrap: wrap; }
+}
